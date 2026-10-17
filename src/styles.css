@@ -276,6 +276,13 @@ table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
 .compare th { text-align: left; font-size: 12px; font-weight: 500; color: var(--ink-3); padding: 6px 8px; border-bottom: 1px solid var(--line); }
 .compare td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
 .compare tr.is-mismatch td { background: #fff6f6; }
+.trust-summary { font-size: 14px; font-weight: 500; margin: 6px 0 4px; }
+.source { display: block; margin-top: 4px; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.source-verified { color: var(--green); }
+.source-self-reported { color: var(--amber); }
+.source-rule { color: var(--ink-3); }
+.pill-wrap { white-space: normal; align-items: flex-start; border-radius: 12px; }
+.pill-wrap .pill-icon { margin-top: 3px; }
 
 /* ---------- toast ---------- */
 .toast-region { position: fixed; left: 24px; bottom: 24px; z-index: 40; width: min(600px, calc(100vw - 32px)); }

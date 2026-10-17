@@ -43,6 +43,7 @@ Keyboard: `S` start working, `J`/`K` next/previous (rows in the queue, cases in 
 - Recording a new request (or rejecting a document) clears a follow-up date that is today or past, and the confirmation says so. This avoids an endless "Follow up" loop.
 - Follow-up dates must be after today. While the due date is ahead they are capped at it; once a case is overdue, any later date is allowed so the worker can still schedule a check-back while waiting on documents.
 - Addresses are split into street, city, state and ZIP at load (`src/lib/address.ts`). The data has only street and city, so the state (`AD`, fictional) and ZIPs (unused `000xx` range, one per street) are placeholders, labelled in the UI.
+- Document comparisons show where each value came from. A case fact counts as **verified** only when a different, already-verified requirement proves it (Identity proves the name, Residency the address, Household members the size, Income the income). Otherwise it's **self-reported**, and the result says "Matches self-reported value" so a weak match doesn't read as proof. Treating unverified facts as coming from the application is a placeholder assumption.
 - `Follow up` opens the request pop-out for the first outstanding requirement ("Send another request").
 - Undo restores the case as it was but keeps history, adding an "Undid: …" entry so the record stays complete.
 - Received dates are tracked per requirement once logged here (`rinfo`); the case-level `rdate` from the data is the fallback.

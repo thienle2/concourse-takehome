@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { formatAddress } from '../lib/address';
 import { fmtDate } from '../lib/date';
-import { buildDocument, hasMismatch, type CompareResult } from '../lib/documents';
+import { buildDocument, hasMismatch, trustSummary, type CompareRow, type Trust } from '../lib/documents';
 import { REJECT_REASONS, REQ_ASK, REQ_DOC, REQ_LABEL, REQUEST_CHANNELS } from '../lib/labels';
 import { isReadOnly, readOnlyReason, receivedDate } from '../lib/status';
 import type { Case, ReqKey } from '../lib/types';
@@ -18,17 +18,27 @@ interface Props {
   onClose: () => void;
 }
 
-const RESULT: Record<CompareResult, { text: string; icon: string; tone: string }> = {
-  match: { text: 'Matches', icon: '✓', tone: 'tone-green' },
-  mismatch: { text: 'Does not match', icon: '✕', tone: 'tone-red' },
-  none: { text: 'Not on record', icon: '–', tone: 'tone-gray' },
-};
+/** Result wording says what the match is worth: a match against a self-reported value proves less. */
+function resultFor(r: CompareRow): { text: string; icon: string; tone: string } {
+  if (r.result === 'none' || !r.source) return { text: 'Not on record', icon: '–', tone: 'tone-gray' };
+  const ok = r.result === 'match';
+  switch (r.source.trust) {
+    case 'verified':
+      return ok ? { text: 'Matches verified record', icon: '✓', tone: 'tone-green' } : { text: 'Does not match verified record', icon: '✕', tone: 'tone-red' };
+    case 'self-reported':
+      return ok ? { text: 'Matches self-reported value', icon: '≈', tone: 'tone-blue' } : { text: 'Does not match self-reported value', icon: '✕', tone: 'tone-red' };
+    case 'rule':
+      return ok ? { text: 'Meets rule', icon: '✓', tone: 'tone-green' } : { text: 'Does not meet rule', icon: '✕', tone: 'tone-red' };
+  }
+}
+
+const SOURCE_ICON: Record<Trust, string> = { verified: '✓', 'self-reported': '◌', rule: '§' };
 
 // PLACEHOLDER: the three confirmations are invented wording, not an agency checklist.
 const CONFIRMATIONS = [
   'The document is readable and complete.',
   'It belongs to someone in this household.',
-  'I compared each detail with the case record.',
+  'I compared each detail with what it is checked against.',
 ];
 
 export function DocPanel({ c, mode, reqKey, onClose }: Props) {
@@ -89,13 +99,18 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
       </figure>
 
       <section aria-labelledby="compare-title">
-        <h3 id="compare-title" style={{ marginBottom: 8 }}>Document compared with the case record</h3>
+        <h3 id="compare-title">What this document is checked against</h3>
+        <p className="trust-summary" data-testid="trust-summary">{trustSummary(doc)}</p>
+        <p className="hint" style={{ marginBottom: 8 }}>
+          <strong>Verified</strong> means an earlier, different document already confirmed the value. <strong>Self-reported</strong> means
+          it's what the household told us and hasn't been checked yet.
+        </p>
         <table className="compare" data-testid="compare">
           <thead>
             <tr>
               <th scope="col">Detail</th>
               <th scope="col">On document</th>
-              <th scope="col">On record</th>
+              <th scope="col">Compared against</th>
               <th scope="col">Result</th>
             </tr>
           </thead>
@@ -104,11 +119,18 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
               <tr key={r.label} className={r.result === 'mismatch' ? 'is-mismatch' : undefined}>
                 <th scope="row" style={{ fontWeight: 500, fontSize: 14, color: 'var(--ink)' }}>{r.label}</th>
                 <td data-label="On document">{r.doc}</td>
-                <td data-label="On record">{r.record ?? <span className="not-provided">Not provided</span>}</td>
+                <td data-label="Compared against">
+                  {r.record ?? <span className="not-provided">Not provided</span>}
+                  {r.source && (
+                    <span className={`source source-${r.source.trust}`}>
+                      <span aria-hidden="true">{SOURCE_ICON[r.source.trust]}</span> {r.source.label}
+                    </span>
+                  )}
+                </td>
                 <td data-label="Result">
-                  <span className={`pill ${RESULT[r.result].tone}`}>
-                    <span className="pill-icon" aria-hidden="true">{RESULT[r.result].icon}</span>
-                    {RESULT[r.result].text}
+                  <span className={`pill pill-wrap ${resultFor(r).tone}`}>
+                    <span className="pill-icon" aria-hidden="true">{resultFor(r).icon}</span>
+                    {resultFor(r).text}
                   </span>
                 </td>
               </tr>

@@ -15,7 +15,10 @@ test('verify a document with a mismatch: confirmations, note, toast, history, un
   // Split screen: case panel stays and highlights the open requirement.
   await expect(page.getByTestId('case-panel')).toBeVisible();
   await expect(page.getByTestId('req-inc')).toHaveAttribute('aria-current', 'true');
-  await expect(pop.getByTestId('compare')).toContainText('Does not match');
+  await expect(pop.getByTestId('compare')).toContainText('Does not match verified record');
+  await expect(pop.getByTestId('compare')).toContainText('Verified from photo ID');
+  await expect(pop.getByTestId('compare')).toContainText('Self-reported on application');
+  await expect(pop.getByTestId('trust-summary')).toContainText('Monthly income is only self-reported');
   await expect(pop.getByTestId('compare')).toContainText('Tyrone Bassett');
 
   await pop.getByRole('button', { name: 'Mark verified' }).click();
