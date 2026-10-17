@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { formatAddress } from '../lib/address';
 import { fmtDate } from '../lib/date';
 import { buildDocument, hasMismatch, type CompareResult } from '../lib/documents';
 import { REJECT_REASONS, REQ_ASK, REQ_DOC, REQ_LABEL, REQUEST_CHANNELS } from '../lib/labels';
@@ -314,7 +315,7 @@ function RequestForm({ c, reqKey, onDone }: { c: Case; reqKey: ReqKey; onDone: (
 
       {c.returned && (
         <Notice tone="warn">
-          <strong>A notice to this household was returned as undeliverable.</strong> A mailed letter to {c.addr} may not reach them. Consider a portal
+          <strong>A notice to this household was returned as undeliverable.</strong> A mailed letter to {formatAddress(c.address)} may not reach them. Consider a portal
           message{c.phone ? ' or a phone call' : ''}, and confirm the address.
         </Notice>
       )}

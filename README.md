@@ -21,6 +21,7 @@ Tests: `npx playwright install chromium` once, then `npm test`.
 | Derived case status, snooze, needs action, next action, guards | `src/lib/status.ts` |
 | What each save does + the confirmation text | `src/lib/actions.ts` |
 | Fake documents and the comparison table | `src/lib/documents.ts` |
+| Address parsing and placeholder state/ZIP | `src/lib/address.ts` |
 | Tabs, tiles, filtering, sorting | `src/lib/queue.ts` |
 | useReducer store, save/undo, failure switch | `src/state/store.tsx` |
 | Screens | `src/components/` |
@@ -41,6 +42,7 @@ Keyboard: `S` start working, `J`/`K` next/previous (rows in the queue, cases in 
 - Status is derived every render from `ver`, `ready` and `decided`. The `status` field in `cases.json` is ignored.
 - Recording a new request (or rejecting a document) clears a follow-up date that is today or past, and the confirmation says so. This avoids an endless "Follow up" loop.
 - Follow-up dates must be after today. While the due date is ahead they are capped at it; once a case is overdue, any later date is allowed so the worker can still schedule a check-back while waiting on documents.
+- Addresses are split into street, city, state and ZIP at load (`src/lib/address.ts`). The data has only street and city, so the state (`AD`, fictional) and ZIPs (unused `000xx` range, one per street) are placeholders, labelled in the UI.
 - `Follow up` opens the request pop-out for the first outstanding requirement ("Send another request").
 - Undo restores the case as it was but keeps history, adding an "Undid: …" entry so the record stays complete.
 - Received dates are tracked per requirement once logged here (`rinfo`); the case-level `rdate` from the data is the fallback.

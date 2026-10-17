@@ -225,6 +225,8 @@ table.queue { width: 100%; border-collapse: collapse; font-size: 14px; }
 .household dt { font-size: 12px; color: var(--ink-3); font-weight: 500; }
 .household dd { margin: 2px 0 0; font-size: 14px; overflow-wrap: anywhere; }
 .household .wide { grid-column: span 2; }
+.household .address-start { grid-column: 1 / span 2; }
+.household-note { font-size: 12px; color: var(--ink-3); font-style: italic; margin-top: 8px; }
 
 .next-block { background: var(--ink); color: #fff; border-radius: var(--radius); padding: 22px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 16px; }
 .next-block .eyebrow { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.75; }
@@ -304,7 +306,7 @@ table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
   .tabs { margin: 0 -16px 16px; padding: 0 16px; }
   .req { grid-template-columns: minmax(0, 1fr); }
   .req-actions { justify-content: flex-start; }
-  .household .wide { grid-column: auto; }
+  .household .wide, .household .address-start { grid-column: auto; }
   .feed li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .toast { flex-wrap: wrap; }
   .toast-region { left: 16px; bottom: 16px; }

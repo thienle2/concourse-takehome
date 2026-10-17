@@ -129,14 +129,18 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
               <div><dt>Phone</dt><dd>{c.phone ?? <NotProvided />}</dd></div>
               <div><dt>Language</dt><dd>{c.lang || <NotProvided />}</dd></div>
               <div><dt>Income</dt><dd>{c.income ?? <NotProvided />}</dd></div>
-              <div className="wide">
+              <div className="wide address-start">
                 <dt>Address</dt>
                 <dd>
-                  {c.addr || <NotProvided />}
+                  {c.address.street || <NotProvided />}
                   {c.returned && <div className="small" style={{ color: 'var(--amber)', fontWeight: 500 }}>▲ Mail returned as undeliverable</div>}
                 </dd>
               </div>
+              <div><dt>City</dt><dd>{c.address.city || <NotProvided />}</dd></div>
+              <div><dt>State</dt><dd>{c.address.state || <NotProvided />}</dd></div>
+              <div><dt>ZIP</dt><dd>{c.address.zip || <NotProvided />}</dd></div>
             </dl>
+            <p className="household-note">State and ZIP are placeholders. The case data doesn't include them.</p>
           </section>
 
           <section className={`next-block${!hasButton ? ' calm' : ''}`} aria-labelledby="next-title" data-testid="next-block">

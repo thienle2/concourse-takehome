@@ -1,3 +1,5 @@
+import { parseAddress, type Address } from './address';
+
 export type ReqKey = 'inc' | 'id' | 'res' | 'hh' | 'shl';
 export const REQ_KEYS: ReqKey[] = ['inc', 'id', 'res', 'hh', 'shl'];
 
@@ -31,7 +33,8 @@ export interface Case {
   name: string;
   hh: number;
   due: string;
-  addr: string;
+  /** Parsed from the raw `addr` string; state and ZIP are placeholders. */
+  address: Address;
   phone: string | null;
   lang: string;
   income: string | null;
@@ -61,7 +64,7 @@ export function normalizeCase(raw: any): Case {
     name: raw.name,
     hh: raw.hh,
     due: raw.due,
-    addr: raw.addr,
+    address: parseAddress(raw.addr ?? ''),
     phone: raw.phone ?? null,
     lang: raw.lang,
     income: raw.income ?? null,

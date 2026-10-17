@@ -2,6 +2,7 @@
 // mismatches come from the case's `dx` field; everything else is derived from the case
 // record or a deterministic seed so a case always shows the same document.
 import { addDays, daysBetween, fmtDate, parseHumanDate, TODAY } from './date';
+import { cityStateZip, formatAddress, parseAddress, type Address } from './address';
 import { REQ_DOC } from './labels';
 import type { Case, ReqKey } from './types';
 
@@ -48,6 +49,10 @@ function compareText(label: string, doc: string, record: string | null): Compare
   return { label, doc, record, result: norm(doc) === norm(record) ? 'match' : 'mismatch' };
 }
 
+function compareAddress(doc: Address, record: Address): CompareRow[] {
+  return [compareText('Street address', doc.street, record.street), compareText('City, state, ZIP', cityStateZip(doc), cityStateZip(record))];
+}
+
 export function buildDocument(c: Case, key: ReqKey): FakeDocument {
   const s = seed(c.id);
   const dx = c.dx[key] ?? {};
@@ -86,11 +91,11 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         fields: [
           { label: 'Name', value: name },
           { label: 'Date of birth', value: dob },
-          { label: 'Address', value: c.addr },
+          { label: 'Address', value: formatAddress(c.address) },
           { label: 'ID number', value: `D${String(s).slice(0, 7).padStart(7, '0')}` },
           { label: 'Expires', value: 'Mar 14, 2030' },
         ],
-        compare: [compareText('Name', name, c.name), compareText('Address', c.addr, c.addr), compareText('Date of birth', dob, null)],
+        compare: [compareText('Name', name, c.name), ...compareAddress(c.address, c.address), compareText('Date of birth', dob, null)],
       };
     }
     case 'res': {
@@ -104,14 +109,14 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         issuer: 'Alder Falls Water & Power (fictional)',
         fields: [
           { label: 'Account holder', value: name },
-          { label: 'Service address', value: c.addr },
+          { label: 'Service address', value: formatAddress(c.address) },
           { label: 'Statement date', value: issued },
           { label: 'Account number', value: `40-${(s % 900000) + 100000}` },
           { label: 'Amount due', value: money(60 + (s % 90)) },
         ],
         compare: [
           compareText('Name', name, c.name),
-          compareText('Address', c.addr, c.addr),
+          ...compareAddress(c.address, c.address),
           {
             label: `Statement date (placeholder rule: within ${RESIDENCY_MAX_AGE_DAYS} days)`,
             doc: age != null ? `${issued} (${age} days ago)` : issued,
@@ -141,7 +146,7 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
       };
     }
     case 'shl': {
-      const addr = String(dx.addr ?? c.addr);
+      const addr = dx.addr != null ? parseAddress(String(dx.addr)) : c.address;
       const rent = 700 + (s % 14) * 65;
       const landlord = pick(LANDLORDS, s);
       return {
@@ -149,12 +154,12 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         issuer: landlord,
         fields: [
           { label: 'Tenant', value: c.name },
-          { label: 'Rental address', value: addr },
+          { label: 'Rental address', value: formatAddress(addr) },
           { label: 'Landlord', value: landlord },
           { label: 'Monthly rent', value: money(rent) },
           { label: 'Term', value: 'Feb 1, 2026 – Jan 31, 2027' },
         ],
-        compare: [compareText('Tenant name', c.name, c.name), compareText('Address', addr, c.addr), compareText('Monthly rent', money(rent), null)],
+        compare: [compareText('Tenant name', c.name, c.name), ...compareAddress(addr, c.address), compareText('Monthly rent', money(rent), null)],
       };
     }
   }
