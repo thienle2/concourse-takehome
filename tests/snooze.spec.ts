@@ -64,6 +64,23 @@ test('setting a follow-up moves a case from Needs action to Snoozed, and Undo br
   await expect(page.getByTestId('queue-row')).toHaveCount(1);
 });
 
+test('an overdue case can still get a follow-up date after the due date', async ({ page }) => {
+  await openCase(page, 'RC-10178'); // due Oct 6: lease received, income not requested
+  await page.getByTestId('req-shl').getByRole('button', { name: 'Review document' }).click();
+  for (const i of [0, 1, 2]) await page.locator(`#confirm-${i}`).check();
+  await page.getByRole('button', { name: 'Mark verified' }).click();
+  await page.getByTestId('req-inc').getByRole('button', { name: 'Request document' }).click();
+  await page.getByLabel('Portal message').check();
+  await page.getByRole('button', { name: 'Record request' }).click();
+
+  await expect(page.getByTestId('next-block')).toContainText('Set follow-up date');
+  await page.getByTestId('next-block').getByRole('button', { name: 'Set follow-up date' }).click();
+  await expect(page.getByTestId('followup-box')).toContainText('This case is overdue (due Oct 6, 2026)');
+  await page.locator('#fu-date').fill('2026-10-26');
+  await page.getByRole('button', { name: 'Save follow-up date' }).click();
+  await expect(page.getByTestId('toast')).toContainText('Follow-up date set for Oct 26, 2026. Case status: Waiting on household (snoozed until Oct 26).');
+});
+
 test('a failed save keeps the date and records nothing', async ({ page }) => {
   await openCase(page, 'RC-10281');
   const before = await page.getByTestId('activity-feed').locator('li').count();

@@ -95,8 +95,9 @@ test.describe('follow-up guard', () => {
   test('blocked when no request is out', () => {
     expect(canSetFollowUp(mk('vvvvv')).reason).toMatch(/No request is out/);
   });
-  test('blocked when the due date has passed', () => {
-    expect(canSetFollowUp(mk('avvvv', { due: '2026-10-10' })).reason).toMatch(/due date/);
+  test('still allowed when the due date is today or has passed', () => {
+    expect(canSetFollowUp(mk('avvvv', { due: '2026-10-10' })).ok).toBe(true);
+    expect(canSetFollowUp(mk('avvvv', { due: TODAY })).ok).toBe(true);
   });
   test('blocked when locked or decided', () => {
     expect(canSetFollowUp(mk('avvvv', { locked: 'M. Okafor' })).reason).toMatch(/M\. Okafor/);
@@ -113,6 +114,17 @@ test.describe('follow-up guard', () => {
     expect(validateFollowUpDate(c, '2026-10-31')).toMatch(/on or before the due date/);
     expect(validateFollowUpDate(c, '2026-10-13')).toBe('');
     expect(validateFollowUpDate(c, '2026-10-30')).toBe('');
+  });
+  test('overdue case: any date after today, no due-date cap', () => {
+    for (const due of ['2026-10-09', TODAY]) {
+      const c = mk('avvvv', { due });
+      expect(validateFollowUpDate(c, TODAY)).toMatch(/after today/);
+      expect(validateFollowUpDate(c, '2026-10-13')).toBe('');
+      expect(validateFollowUpDate(c, '2026-11-15')).toBe('');
+    }
+  });
+  test('overdue waiting case without a follow-up date asks for one', () => {
+    expect(nextAction(mk('vvavv', { due: '2026-10-09' })).kind).toBe('set-followup');
   });
   test('saving a follow-up snoozes the case and says so', () => {
     const { next, message } = applyAction(mk('avvvv'), { type: 'setFollowUp', date: '2026-10-20', note: '' });

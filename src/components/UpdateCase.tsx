@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { addDays, fmtDate, TODAY } from '../lib/date';
-import { canMarkReady, canSetFollowUp, isSnoozed, readOnlyReason, validateFollowUpDate } from '../lib/status';
+import { canMarkReady, canSetFollowUp, followUpMax, isSnoozed, readOnlyReason, validateFollowUpDate } from '../lib/status';
 import type { Case } from '../lib/types';
 import { useStore } from '../state/store';
 import { ErrorSummary, NotSaved, type FieldError } from './bits';
@@ -37,6 +37,7 @@ export function UpdateCase({ c, open, setOpen }: Props) {
 function FollowUpBox({ c, open, setOpen }: { c: Case; open: boolean; setOpen: (o: boolean) => void }) {
   const { save } = useStore();
   const guard = canSetFollowUp(c);
+  const max = followUpMax(c);
   const [date, setDate] = useState(c.fu && c.fu > TODAY ? c.fu : '');
   const [note, setNote] = useState('');
   const [errors, setErrors] = useState<FieldError[]>([]);
@@ -89,7 +90,9 @@ function FollowUpBox({ c, open, setOpen }: { c: Case; open: boolean; setOpen: (o
           <div className="field">
             <label className="label" htmlFor="fu-date">Follow up on</label>
             <span className="hint" id="fu-date-hint">
-              After today and on or before the due date ({fmtDate(c.due)}). The case is snoozed until then.
+              {max
+                ? `After today and on or before the due date (${fmtDate(max)}). The case is snoozed until then.`
+                : `This case is overdue (due ${fmtDate(c.due)}). Pick any date after today to check back; the case is snoozed until then.`}
             </span>
             {dateErr && <span className="field-error" id="fu-date-err">{dateErr}</span>}
             <input
@@ -98,7 +101,7 @@ function FollowUpBox({ c, open, setOpen }: { c: Case; open: boolean; setOpen: (o
               className={`input${dateErr ? ' invalid' : ''}`}
               value={date}
               min={addDays(TODAY, 1)}
-              max={c.due}
+              max={max ?? undefined}
               onChange={(e) => setDate(e.target.value)}
               aria-invalid={!!dateErr || undefined}
               aria-describedby={`fu-date-hint${dateErr ? ' fu-date-err' : ''}`}

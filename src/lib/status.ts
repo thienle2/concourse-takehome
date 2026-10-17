@@ -57,16 +57,23 @@ export function canSetFollowUp(c: Case): Guard {
   const m = keysWith(c, 'm');
   if (m.length) return { ok: false, reason: `${listLabels(m)} ${m.length > 1 ? "haven't" : "hasn't"} been requested yet. Request it first so there is something to follow up on.` };
   if (!keysWith(c, 'a').length) return { ok: false, reason: 'No request is out to the household, so there is nothing to follow up on.' };
-  if (c.due <= TODAY) return { ok: false, reason: `The due date (${fmtDate(c.due)}) is today or has passed, so no follow-up date fits before it.` };
   return { ok: true, reason: '' };
 }
+
+/**
+ * Latest allowed follow-up date. Capped at the due date while it is still ahead; once the
+ * due date is today or past, any later date is allowed so an overdue case can still be
+ * checked on while the household sends documents.
+ */
+export const followUpMax = (c: Case): string | null => (c.due > TODAY ? c.due : null);
 
 /** Returns an error message, or '' when the date is allowed. */
 export function validateFollowUpDate(c: Case, date: string): string {
   if (!date) return 'Enter a follow-up date.';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return 'Enter the date as month, day and year.';
   if (date <= TODAY) return `Choose a date after today (${fmtDate(TODAY)}).`;
-  if (date > c.due) return `Choose a date on or before the due date (${fmtDate(c.due)}).`;
+  const max = followUpMax(c);
+  if (max && date > max) return `Choose a date on or before the due date (${fmtDate(max)}).`;
   return '';
 }
 
@@ -133,10 +140,7 @@ export function nextAction(c: Case): NextAction {
       const when = c.fu === TODAY ? 'is today' : `was ${fmtShort(c.fu)}`;
       return { kind: 'follow-up', label: 'Follow up', key: k, reason: `Follow-up date ${when}. ${outstanding}` };
     }
-    if (canSetFollowUp(c).ok) {
-      return { kind: 'set-followup', label: 'Set follow-up date', key: k, reason: `${outstanding} Pick a date to check back.` };
-    }
-    return { kind: 'follow-up', label: 'Follow up', key: k, reason: `Due date has passed with requests still out. ${outstanding}` };
+    return { kind: 'set-followup', label: 'Set follow-up date', key: k, reason: `${outstanding} Pick a date to check back.` };
   }
   return { kind: 'mark-ready', label: 'Mark ready for decision', reason: 'All five requirements are verified.' };
 }
