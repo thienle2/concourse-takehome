@@ -1,0 +1,2459 @@
+[
+  {
+    "id": "RC-10231",
+    "name": "Marcus T. Okonkwo-Reyes",
+    "hh": 4,
+    "due": "2026-10-09",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "r",
+      "shl": "m"
+    },
+    "ev": [
+      [
+        "2026-09-30",
+        "Household members form uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-06",
+        "Recertification notice returned as undeliverable",
+        "Mail room"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "vinfo": {},
+    "dx": {},
+    "addr": "418 Larkspur Ct, Apt 2, Alder Falls",
+    "phone": "(555) 555-0142",
+    "lang": "English",
+    "income": "$1,420 per month, reported",
+    "returned": true,
+    "fu": "2026-10-12",
+    "rdate": "2026-09-30"
+  },
+  {
+    "id": "RC-10244",
+    "name": "Maria-Guadalupe Hern\u00e1ndez-Villanueva de la Cruz",
+    "hh": 7,
+    "due": "2026-10-13",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "v",
+      "hh": "r",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-07",
+        "Pay statement uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-10",
+        "Household members form received",
+        "Mail room"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {
+      "inc": {
+        "monthly": "$2,640"
+      }
+    },
+    "addr": "2290 Quarry Rd, Alder Falls",
+    "phone": "(555) 555-0118",
+    "lang": "Spanish",
+    "income": "$3,015 per month, reported",
+    "rdate": "2026-10-10"
+  },
+  {
+    "id": "RC-10252",
+    "name": "Dolores Pembrook",
+    "hh": 1,
+    "due": "2026-10-14",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-09",
+        "Lease received",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {
+      "shl": {
+        "addr": "77 Ferris Ln, Unit A, Alder Falls"
+      }
+    },
+    "addr": "77 Ferris Ln, Unit B, Alder Falls",
+    "phone": "(555) 555-0171",
+    "lang": "English",
+    "income": "$1,102 per month, reported",
+    "rdate": "2026-10-09"
+  },
+  {
+    "id": "RC-10260",
+    "name": "Anh Nguyen",
+    "hh": 3,
+    "due": "2026-10-15",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter). No phone number on file",
+        "You"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "vinfo": {},
+    "dx": {},
+    "addr": "903 Millrace Dr, Alder Falls",
+    "phone": null,
+    "lang": "Vietnamese",
+    "income": null,
+    "fu": "2026-10-14"
+  },
+  {
+    "id": "RC-10268",
+    "name": "Ruth Ann Kowalczyk",
+    "hh": 2,
+    "due": "2026-10-16",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {},
+    "addr": "15 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0133",
+    "lang": "English",
+    "income": "$1,960 per month, reported",
+    "ready": true
+  },
+  {
+    "id": "RC-10275",
+    "name": "Tyrone Basset",
+    "hh": 5,
+    "due": "2026-10-19",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Employer statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {
+      "inc": {
+        "name": "Tyrone Bassett"
+      }
+    },
+    "addr": "6 Wicklow St, Alder Falls",
+    "phone": "(555) 555-0190",
+    "lang": "English",
+    "income": "$2,640 per month, reported",
+    "rdate": "2026-10-10"
+  },
+  {
+    "id": "RC-10281",
+    "name": "Samira Al-Farouq",
+    "hh": 3,
+    "due": "2026-10-21",
+    "ver": {
+      "inc": "v",
+      "id": "a",
+      "res": "a",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Income verified",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: identity (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: residency (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "id": {
+        "d": "2026-10-05",
+        "via": "Portal message"
+      },
+      "res": {
+        "d": "2026-10-05",
+        "via": "Portal message"
+      }
+    },
+    "vinfo": {},
+    "dx": {},
+    "addr": "1140 Birchmoor Ave, Alder Falls",
+    "phone": "(555) 555-0126",
+    "lang": "Arabic",
+    "income": "$1,780 per month, reported",
+    "fu": "2026-10-16"
+  },
+  {
+    "id": "RC-10290",
+    "name": "Walter Lindqvist",
+    "hh": 1,
+    "due": "2026-10-23",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-09",
+        "Shelter costs verified",
+        "You"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {},
+    "addr": "52 Orchard Row, Alder Falls",
+    "phone": "(555) 555-0107",
+    "lang": "English",
+    "income": "$1,215 per month, reported"
+  },
+  {
+    "id": "RC-10297",
+    "name": "Priya Venkataraman-Shah",
+    "hh": 6,
+    "due": "2026-10-26",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: income (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: household members (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-05",
+        "via": "Portal message"
+      },
+      "hh": {
+        "d": "2026-10-05",
+        "via": "Portal message"
+      }
+    },
+    "vinfo": {},
+    "dx": {},
+    "addr": "388 Harrow Pl, Alder Falls",
+    "phone": "(555) 555-0155",
+    "lang": "English",
+    "income": null,
+    "fu": "2026-10-19"
+  },
+  {
+    "id": "RC-10304",
+    "name": "DeShawn Whitaker",
+    "hh": 4,
+    "due": "2026-10-28",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-11",
+        "Pay statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {},
+    "addr": "29 Lindenwood Ct, Alder Falls",
+    "phone": "(555) 555-0164",
+    "lang": "English",
+    "income": "$2,210 per month, reported",
+    "locked": "M. Okafor",
+    "rdate": "2026-10-11"
+  },
+  {
+    "id": "RC-10311",
+    "name": "Eleanor Fitzgerald-Montgomery",
+    "hh": 2,
+    "due": "2026-11-02",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "r",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Utility bill received",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {
+      "res": {
+        "issued": "Aug 1, 2026"
+      }
+    },
+    "addr": "710 Saltmarsh Rd, Alder Falls",
+    "phone": "(555) 555-0149",
+    "lang": "English",
+    "income": "$1,540 per month, reported",
+    "rdate": "2026-10-10"
+  },
+  {
+    "id": "RC-10319",
+    "name": "Jin-ho Park",
+    "hh": 3,
+    "due": "2026-11-06",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "a"
+    },
+    "ev": [
+      [
+        "2026-10-01",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-01",
+        "Document request recorded: shelter costs (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-01",
+        "via": "Mailed letter"
+      },
+      "shl": {
+        "d": "2026-10-01",
+        "via": "Mailed letter"
+      }
+    },
+    "vinfo": {},
+    "dx": {},
+    "addr": "204 Fernbank Dr, Alder Falls",
+    "phone": "(555) 555-0138",
+    "lang": "Korean",
+    "income": null,
+    "fu": "2026-10-11"
+  },
+  {
+    "id": "RC-10326",
+    "name": "Rosa Delgado",
+    "hh": 8,
+    "due": "2026-11-12",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "r",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-11",
+        "Household members form uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {
+      "hh": {
+        "members": 7,
+        "signed": false
+      }
+    },
+    "addr": "1 Millstone Ct, Alder Falls",
+    "phone": "(555) 555-0112",
+    "lang": "Spanish",
+    "income": "$3,380 per month, reported",
+    "rdate": "2026-10-11"
+  },
+  {
+    "id": "RC-10198",
+    "name": "Chukwuemeka Obiora",
+    "hh": 1,
+    "due": "2026-11-20",
+    "status": "decided",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Decision recorded",
+        "Supervisor"
+      ]
+    ],
+    "req": {},
+    "vinfo": {},
+    "dx": {},
+    "addr": "18 Cobbler Ln, Alder Falls",
+    "phone": "(555) 555-0181",
+    "lang": "English",
+    "income": "$1,330 per month, reported",
+    "decided": "Decision recorded Oct 8"
+  },
+  {
+    "id": "RC-10106",
+    "name": "Lakisha Schneider",
+    "hh": 2,
+    "due": "2026-11-11",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-12",
+        "Last document verified",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "2714 Pine Hollow Ln, Alder Falls",
+    "phone": "(555) 555-0103",
+    "lang": "English",
+    "income": "$2,280 per month, reported",
+    "rdate": "2026-10-06",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10114",
+    "name": "Fatima Ortega",
+    "hh": 3,
+    "due": "2026-12-10",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "r",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-07",
+        "Lease uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-07",
+        "Utility bill uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "dx": {
+      "shl": {
+        "addr": "1944 Orchard Row, Alder Falls"
+      },
+      "res": {
+        "name": "Fatima Ortegaa",
+        "issued": "Jul 28, 2026"
+      }
+    },
+    "addr": "1942 Orchard Row, Alder Falls",
+    "phone": "(555) 555-0113",
+    "lang": "English",
+    "income": null,
+    "rdate": "2026-10-07",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10131",
+    "name": "Nikolai Whitfield-Okafor",
+    "hh": 2,
+    "due": "2026-10-25",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Pay statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "1936 Millstone Ct, Apt 2B, Alder Falls",
+    "phone": "(555) 555-0166",
+    "lang": "Spanish",
+    "income": "$2,500 per month, reported",
+    "rdate": "2026-10-08",
+    "locked": "M. Okafor",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10140",
+    "name": "Tamar Schneider",
+    "hh": 1,
+    "due": "2026-10-31",
+    "status": "decided",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Decision recorded",
+        "Supervisor"
+      ]
+    ],
+    "req": {},
+    "addr": "2089 Cobbler Ln, Unit 1A, Alder Falls",
+    "phone": null,
+    "lang": "Arabic",
+    "income": null,
+    "rdate": "2026-10-09",
+    "decided": "Decision recorded Oct 8",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10149",
+    "name": "Ebony Moreau",
+    "hh": 3,
+    "due": "2026-11-06",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "m"
+    },
+    "ev": [
+      [
+        "2026-10-04",
+        "Recertification notice returned as undeliverable",
+        "Mail room"
+      ]
+    ],
+    "req": {},
+    "addr": "2096 Marlow Ct, Unit 7, Alder Falls",
+    "phone": "(555) 555-0172",
+    "lang": "Russian",
+    "income": "$1,180 per month, reported",
+    "rdate": "2026-10-08",
+    "returned": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10163",
+    "name": "Anastasia Konstantinopoulou-Whitcombe",
+    "hh": 6,
+    "due": "2026-10-06",
+    "ver": {
+      "inc": "r",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "m"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Pay statement uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-08",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "3459 Tamarack Way, Apt 3, Alder Falls",
+    "phone": "(555) 555-0197",
+    "lang": "Spanish",
+    "income": "$660 per month, reported",
+    "rdate": "2026-10-08",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10169",
+    "name": "Xavier Mbeki",
+    "hh": 8,
+    "due": "2026-11-11",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-09-30",
+        "Document request recorded: household members (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-09",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-09-30",
+        "via": "Mailed letter"
+      }
+    },
+    "dx": {
+      "shl": {
+        "addr": "1317 Granary Ave, Alder Falls"
+      }
+    },
+    "addr": "1315 Granary Ave, Alder Falls",
+    "phone": null,
+    "lang": "Somali",
+    "income": "$2,315 per month, reported",
+    "rdate": "2026-10-09",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10178",
+    "name": "Priscilla Mbeki",
+    "hh": 2,
+    "due": "2026-10-06",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-09",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "2460 Tidewater Dr, Unit 2B, Alder Falls",
+    "phone": "(555) 555-0124",
+    "lang": "English",
+    "income": "$700 per month, reported",
+    "rdate": "2026-10-09",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10187",
+    "name": "Lakisha Jankowski",
+    "hh": 2,
+    "due": "2026-12-07",
+    "status": "decided",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "Decision recorded",
+        "Supervisor"
+      ]
+    ],
+    "req": {},
+    "addr": "1221 Quarry Rd, Apt 3, Alder Falls",
+    "phone": "(555) 555-0137",
+    "lang": "Haitian Creole",
+    "income": "$2,715 per month, reported",
+    "rdate": "2026-10-08",
+    "decided": "Decision recorded Oct 6",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10201",
+    "name": "Vivian Johansson",
+    "hh": 2,
+    "due": "2026-10-14",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "774 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0136",
+    "lang": "English",
+    "income": "$940 per month, reported",
+    "rdate": "2026-10-10",
+    "ready": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10217",
+    "name": "Ebony Gutierrez",
+    "hh": 1,
+    "due": "2026-11-29",
+    "ver": {
+      "inc": "a",
+      "id": "a",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-25",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-09-25",
+        "Document request recorded: identity (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-09-25",
+        "via": "Mailed letter"
+      },
+      "id": {
+        "d": "2026-09-25",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "3970 Cobbler Ln, Alder Falls",
+    "phone": "(555) 555-0167",
+    "lang": "Spanish",
+    "income": "$2,115 per month, reported",
+    "rdate": "2026-10-05",
+    "fu": "2026-10-11",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10234",
+    "name": "Juan Carlos de la Rosa Montenegro-Salazar",
+    "hh": 2,
+    "due": "2026-11-02",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "1389 Orchard Row, Alder Falls",
+    "phone": "(555) 555-0191",
+    "lang": "English",
+    "income": "$1,700 per month, reported",
+    "rdate": "2026-10-10",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10240",
+    "name": "Omar Castellanos-Reyes",
+    "hh": 1,
+    "due": "2026-11-02",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-26",
+        "Document request recorded: income (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-09-26",
+        "via": "Portal message"
+      }
+    },
+    "addr": "2771 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0163",
+    "lang": "English",
+    "income": "$600 per month, reported",
+    "rdate": "2026-10-11",
+    "fu": "2026-10-11",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10248",
+    "name": "Wilhelmina Eze",
+    "hh": 3,
+    "due": "2026-11-13",
+    "ver": {
+      "inc": "m",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "id": {
+        "name": "Wilhelmina Ezee"
+      }
+    },
+    "addr": "2450 Wicklow St, Alder Falls",
+    "phone": "(555) 555-0197",
+    "lang": "English",
+    "income": "$2,615 per month, reported",
+    "rdate": "2026-10-08",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10259",
+    "name": "Darnell Grzybowski",
+    "hh": 7,
+    "due": "2026-11-22",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-09",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "357 Millrace Dr, Alder Falls",
+    "phone": "(555) 555-0199",
+    "lang": "English",
+    "income": "$3,015 per month, reported",
+    "rdate": "2026-10-06",
+    "ready": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10270",
+    "name": "Ivan J. Vasquez-Hollingsworth",
+    "hh": 2,
+    "due": "2026-10-25",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "a",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-09-29",
+        "Document request recorded: residency (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-06",
+        "Pay statement uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-06",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "res": {
+        "d": "2026-09-29",
+        "via": "Portal message"
+      }
+    },
+    "addr": "2379 Millrace Dr, Alder Falls",
+    "phone": "(555) 555-0110",
+    "lang": "English",
+    "income": "$2,580 per month, reported",
+    "rdate": "2026-10-06",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10283",
+    "name": "Gustavo Moreau",
+    "hh": 6,
+    "due": "2026-11-07",
+    "ver": {
+      "inc": "r",
+      "id": "a",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-30",
+        "Document request recorded: identity (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Pay statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "id": {
+        "d": "2026-09-30",
+        "via": "Portal message"
+      }
+    },
+    "dx": {
+      "inc": {
+        "monthly": "$1,100"
+      }
+    },
+    "addr": "2278 Wicklow St, Apt B, Alder Falls",
+    "phone": "(555) 555-0176",
+    "lang": "Haitian Creole",
+    "income": "$615 per month, reported",
+    "rdate": "2026-10-05",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10295",
+    "name": "Sven Eze",
+    "hh": 3,
+    "due": "2026-10-12",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "2012 Wicklow St, Alder Falls",
+    "phone": "(555) 555-0199",
+    "lang": "Spanish",
+    "income": null,
+    "rdate": "2026-10-09",
+    "ready": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10298",
+    "name": "Oluwaseun Adebayo-Fitzgerald Jr.",
+    "hh": 2,
+    "due": "2026-10-21",
+    "ver": {
+      "inc": "v",
+      "id": "a",
+      "res": "a",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: household members (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: residency (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: identity (phone call (logged))",
+        "You"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      },
+      "res": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      },
+      "id": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      }
+    },
+    "addr": "211 Marlow Ct, Alder Falls",
+    "phone": "(555) 555-0126",
+    "lang": "Russian",
+    "income": "$1,980 per month, reported",
+    "rdate": "2026-10-07",
+    "fu": "2026-10-18",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10315",
+    "name": "Sven Zelaya",
+    "hh": 2,
+    "due": "2026-11-21",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-07",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "2801 Kestrel Way, Alder Falls",
+    "phone": "(555) 555-0158",
+    "lang": "Arabic",
+    "income": "$2,540 per month, reported",
+    "rdate": "2026-10-07",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10331",
+    "name": "Wen Yilmaz",
+    "hh": 2,
+    "due": "2026-11-01",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "m"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "1289 Tidewater Dr, Alder Falls",
+    "phone": "(555) 555-0129",
+    "lang": "Russian",
+    "income": null,
+    "rdate": "2026-10-10",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10345",
+    "name": "Fatima Bellamy",
+    "hh": 4,
+    "due": "2026-11-08",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-11",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "shl": {
+        "addr": "1560 Tamarack Way, Alder Falls"
+      }
+    },
+    "addr": "1558 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0161",
+    "lang": "Spanish",
+    "income": "$1,960 per month, reported",
+    "rdate": "2026-10-11",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10356",
+    "name": "Thanh Nwosu",
+    "hh": 1,
+    "due": "2026-11-22",
+    "ver": {
+      "inc": "a",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-07",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "1411 Tidewater Dr, Alder Falls",
+    "phone": "(555) 555-0199",
+    "lang": "Spanish",
+    "income": "$1,640 per month, reported",
+    "rdate": "2026-10-07",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10364",
+    "name": "Rashida Bui",
+    "hh": 1,
+    "due": "2026-10-10",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "3771 Lindenwood Ct, Alder Falls",
+    "phone": "(555) 555-0151",
+    "lang": "English",
+    "income": null,
+    "rdate": "2026-10-08",
+    "ready": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10373",
+    "name": "Kateryna Underwood",
+    "hh": 3,
+    "due": "2026-12-10",
+    "ver": {
+      "inc": "r",
+      "id": "a",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-30",
+        "Document request recorded: identity (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Pay statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "id": {
+        "d": "2026-09-30",
+        "via": "Mailed letter"
+      }
+    },
+    "dx": {
+      "inc": {
+        "monthly": "$3,300"
+      }
+    },
+    "addr": "2320 Saltmarsh Rd, Alder Falls",
+    "phone": "(555) 555-0194",
+    "lang": "Spanish",
+    "income": "$1,980 per month, reported",
+    "rdate": "2026-10-05",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10382",
+    "name": "Bartholomew Featherstonehaugh-Nguyen",
+    "hh": 1,
+    "due": "2026-11-03",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "a",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: residency (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: household members (phone call (logged))",
+        "You"
+      ]
+    ],
+    "req": {
+      "res": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      },
+      "hh": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      }
+    },
+    "addr": "1999 Wicklow St, Alder Falls",
+    "phone": "(555) 555-0143",
+    "lang": "Arabic",
+    "income": "$3,040 per month, reported",
+    "rdate": "2026-10-10",
+    "fu": "2026-10-28",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10398",
+    "name": "Esperanza Vang",
+    "hh": 8,
+    "due": "2026-11-22",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "a",
+      "hh": "a",
+      "shl": "a"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: shelter costs (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: household members (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-05",
+        "Document request recorded: residency (phone call (logged))",
+        "You"
+      ]
+    ],
+    "req": {
+      "shl": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      },
+      "hh": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      },
+      "res": {
+        "d": "2026-10-05",
+        "via": "Phone call (logged)"
+      }
+    },
+    "addr": "1102 Larkspur Ct, Alder Falls",
+    "phone": "(555) 555-0189",
+    "lang": "Arabic",
+    "income": null,
+    "rdate": "2026-10-06",
+    "fu": "2026-10-23",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10405",
+    "name": "Aaliyah Petrovic",
+    "hh": 9,
+    "due": "2026-11-24",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: household members (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-10-05",
+        "via": "Portal message"
+      }
+    },
+    "addr": "2114 Birchmoor Ave, Unit B, Alder Falls",
+    "phone": "(555) 555-0177",
+    "lang": "English",
+    "income": "$1,300 per month, reported",
+    "rdate": "2026-10-06",
+    "fu": "2026-11-08",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10417",
+    "name": "Nikolai Petrovic",
+    "hh": 1,
+    "due": "2026-10-24",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-28",
+        "Document request recorded: household members (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-09-28",
+        "via": "Portal message"
+      }
+    },
+    "addr": "1286 Harrow Pl, Alder Falls",
+    "phone": "(555) 555-0155",
+    "lang": "Arabic",
+    "income": null,
+    "rdate": "2026-10-10",
+    "fu": "2026-10-10",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10432",
+    "name": "Zofia Yilmaz",
+    "hh": 5,
+    "due": "2026-11-07",
+    "ver": {
+      "inc": "v",
+      "id": "a",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Document request recorded: identity (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "id": {
+        "d": "2026-10-05",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "2355 Quarry Rd, Alder Falls",
+    "phone": "(555) 555-0191",
+    "lang": "Spanish",
+    "income": null,
+    "rdate": "2026-10-10",
+    "fu": "2026-11-04",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10446",
+    "name": "Ngozi Chidinma Okwuosa-Prendergast",
+    "hh": 3,
+    "due": "2026-11-14",
+    "ver": {
+      "inc": "v",
+      "id": "m",
+      "res": "m",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "1815 Millstone Ct, Alder Falls",
+    "phone": "(555) 555-0153",
+    "lang": "English",
+    "income": "$680 per month, reported",
+    "rdate": "2026-10-11",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10460",
+    "name": "Vikram Yamamoto",
+    "hh": 1,
+    "due": "2026-11-10",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-03",
+        "Document request recorded: household members (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-10-03",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "374 Pine Hollow Ln, Alder Falls",
+    "phone": "(555) 555-0164",
+    "lang": "Somali",
+    "income": "$760 per month, reported",
+    "rdate": "2026-10-07",
+    "fu": "2026-10-14",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10468",
+    "name": "Fatima Santiago",
+    "hh": 3,
+    "due": "2026-10-16",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "a"
+    },
+    "ev": [
+      [
+        "2026-10-04",
+        "Document request recorded: shelter costs (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-04",
+        "Document request recorded: household members (portal message)",
+        "You"
+      ]
+    ],
+    "req": {
+      "shl": {
+        "d": "2026-10-04",
+        "via": "Portal message"
+      },
+      "hh": {
+        "d": "2026-10-04",
+        "via": "Portal message"
+      }
+    },
+    "addr": "1918 Saltmarsh Rd, Apt B, Alder Falls",
+    "phone": "(555) 555-0163",
+    "lang": "English",
+    "income": null,
+    "rdate": "2026-10-11",
+    "fu": "2026-10-14",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10474",
+    "name": "Quentin Ahn",
+    "hh": 2,
+    "due": "2026-11-30",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "v",
+      "hh": "m",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "1595 Quarry Rd, Alder Falls",
+    "phone": "(555) 555-0158",
+    "lang": "Somali",
+    "income": "$915 per month, reported",
+    "rdate": "2026-10-09",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10484",
+    "name": "Bao Whitfield-Okafor",
+    "hh": 6,
+    "due": "2026-11-09",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "shl": {
+        "addr": "3825 Quarry Rd, Alder Falls"
+      }
+    },
+    "addr": "3823 Quarry Rd, Alder Falls",
+    "phone": null,
+    "lang": "English",
+    "income": "$1,860 per month, reported",
+    "rdate": "2026-10-06",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10487",
+    "name": "Gwendolyn Zimmerman",
+    "hh": 1,
+    "due": "2026-11-05",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-11",
+        "Last document verified",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "3418 Quarry Rd, Alder Falls",
+    "phone": "(555) 555-0189",
+    "lang": "Somali",
+    "income": "$2,640 per month, reported",
+    "rdate": "2026-10-10",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10493",
+    "name": "Maria Del Carmen Gutierrez y Hernandez",
+    "hh": 3,
+    "due": "2026-11-11",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "Lease uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "2334 Lindenwood Ct, Alder Falls",
+    "phone": "(555) 555-0195",
+    "lang": "Haitian Creole",
+    "income": "$2,840 per month, reported",
+    "rdate": "2026-10-06",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10509",
+    "name": "Zofia Oyelaran",
+    "hh": 5,
+    "due": "2026-11-10",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-01",
+        "Document request recorded: income (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-09",
+        "Recertification notice returned as undeliverable",
+        "Mail room"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-01",
+        "via": "Portal message"
+      }
+    },
+    "addr": "3372 Orchard Row, Alder Falls",
+    "phone": "(555) 555-0121",
+    "lang": "Vietnamese",
+    "income": "$1,215 per month, reported",
+    "rdate": "2026-10-08",
+    "fu": "2026-10-11",
+    "returned": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10525",
+    "name": "Hiroshi Quintanilla",
+    "hh": 1,
+    "due": "2026-10-12",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "3987 Ferris Ln, Alder Falls",
+    "phone": "(555) 555-0197",
+    "lang": "Spanish",
+    "income": "$1,840 per month, reported",
+    "rdate": "2026-10-07",
+    "locked": "J. Reyes",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10539",
+    "name": "Cheng Wojcik",
+    "hh": 1,
+    "due": "2026-11-04",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Shelter costs verified",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "695 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0155",
+    "lang": "Russian",
+    "income": "$2,740 per month, reported",
+    "rdate": "2026-10-09",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10555",
+    "name": "Joanne Tomlinson",
+    "hh": 7,
+    "due": "2026-12-08",
+    "ver": {
+      "inc": "v",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "2829 Millrace Dr, Alder Falls",
+    "phone": "(555) 555-0130",
+    "lang": "Spanish",
+    "income": "$1,680 per month, reported",
+    "rdate": "2026-10-05",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10561",
+    "name": "Odalys Lindgren-Ostrander",
+    "hh": 6,
+    "due": "2026-11-13",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "r",
+      "hh": "r",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Utility bill uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-10",
+        "Household members form uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "res": {
+        "name": "Odalys Lindgren-Ostrandeer"
+      }
+    },
+    "addr": "3108 Saltmarsh Rd, Alder Falls",
+    "phone": "(555) 555-0155",
+    "lang": "Korean",
+    "income": null,
+    "rdate": "2026-10-10",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10565",
+    "name": "Joanne Novak",
+    "hh": 1,
+    "due": "2026-11-16",
+    "status": "decided",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Decision recorded",
+        "Supervisor"
+      ]
+    ],
+    "req": {},
+    "addr": "3991 Heron Bend, Apt 4C, Alder Falls",
+    "phone": "(555) 555-0129",
+    "lang": "English",
+    "income": "$2,280 per month, reported",
+    "rdate": "2026-10-05",
+    "decided": "Decision recorded Oct 10",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10577",
+    "name": "Yolanda Papadopoulos",
+    "hh": 3,
+    "due": "2026-11-13",
+    "ver": {
+      "inc": "m",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "701 Cobbler Ln, Apt 4C, Alder Falls",
+    "phone": "(555) 555-0140",
+    "lang": "Haitian Creole",
+    "income": "$3,260 per month, reported",
+    "rdate": "2026-10-08",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10589",
+    "name": "Lakisha Moreau",
+    "hh": 1,
+    "due": "2026-10-25",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "r",
+      "shl": "r"
+    },
+    "ev": [
+      [
+        "2026-10-05",
+        "Lease uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-05",
+        "Household members form uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "hh": {
+        "members": 1,
+        "signed": true
+      }
+    },
+    "addr": "3304 Millrace Dr, Alder Falls",
+    "phone": "(555) 555-0155",
+    "lang": "English",
+    "income": null,
+    "rdate": "2026-10-05",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10605",
+    "name": "Quentin Lemaire",
+    "hh": 3,
+    "due": "2026-11-21",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "All five requirements verified; marked ready for decision",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "3739 Marlow Ct, Alder Falls",
+    "phone": "(555) 555-0106",
+    "lang": "English",
+    "income": "$3,800 per month, reported",
+    "rdate": "2026-10-05",
+    "ready": true,
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10615",
+    "name": "Sione Oyelaran",
+    "hh": 2,
+    "due": "2026-11-16",
+    "ver": {
+      "inc": "r",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-06",
+        "Pay statement uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-06",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "inc": {
+        "monthly": "$2,850"
+      },
+      "id": {
+        "name": "Sione Oyelaraan"
+      }
+    },
+    "addr": "3750 Alder Creek Rd, Unit 7, Alder Falls",
+    "phone": "(555) 555-0130",
+    "lang": "Korean",
+    "income": "$3,400 per month, reported",
+    "rdate": "2026-10-06",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10624",
+    "name": "Aaliyah T. Mbeki",
+    "hh": 1,
+    "due": "2026-10-31",
+    "ver": {
+      "inc": "v",
+      "id": "a",
+      "res": "v",
+      "hh": "v",
+      "shl": "m"
+    },
+    "ev": [
+      [
+        "2026-09-30",
+        "Document request recorded: identity (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "id": {
+        "d": "2026-09-30",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "67 Harrow Pl, Alder Falls",
+    "phone": "(555) 555-0192",
+    "lang": "English",
+    "income": null,
+    "rdate": "2026-10-06",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10637",
+    "name": "Mei-Ling Xiong",
+    "hh": 2,
+    "due": "2026-11-28",
+    "ver": {
+      "inc": "v",
+      "id": "m",
+      "res": "r",
+      "hh": "r",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-10",
+        "Household members form uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-10",
+        "Utility bill uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "dx": {
+      "hh": {
+        "members": 1,
+        "signed": true
+      },
+      "res": {
+        "name": "Mei-Ling Xioong"
+      }
+    },
+    "addr": "3007 Orchard Row, Alder Falls",
+    "phone": "(555) 555-0112",
+    "lang": "Spanish",
+    "income": "$2,780 per month, reported",
+    "rdate": "2026-10-10",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10650",
+    "name": "Sven T. Jankowski",
+    "hh": 5,
+    "due": "2026-11-14",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-11",
+        "Income verified",
+        "You"
+      ]
+    ],
+    "req": {},
+    "addr": "1818 Kestrel Way, Apt 7, Alder Falls",
+    "phone": null,
+    "lang": "English",
+    "income": "$2,840 per month, reported",
+    "rdate": "2026-10-05",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10667",
+    "name": "Yolanda Schneider",
+    "hh": 4,
+    "due": "2026-11-02",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "a",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-09-25",
+        "Document request recorded: household members (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "hh": {
+        "d": "2026-09-25",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "1323 Alder Creek Rd, Alder Falls",
+    "phone": "(555) 555-0193",
+    "lang": "Korean",
+    "income": "$1,300 per month, reported",
+    "rdate": "2026-10-08",
+    "fu": "2026-10-09",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10672",
+    "name": "Ebony Grzybowski",
+    "hh": 6,
+    "due": "2026-10-26",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "a",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-02",
+        "Document request recorded: residency (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ]
+    ],
+    "req": {
+      "res": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      },
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "addr": "1684 Foundry St, Alder Falls",
+    "phone": "(555) 555-0166",
+    "lang": "English",
+    "income": "$2,160 per month, reported",
+    "rdate": "2026-10-10",
+    "fu": "2026-10-12",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10688",
+    "name": "Sione Wojcik",
+    "hh": 1,
+    "due": "2026-11-06",
+    "status": "decided",
+    "ver": {
+      "inc": "v",
+      "id": "v",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-04",
+        "Decision recorded",
+        "Supervisor"
+      ]
+    ],
+    "req": {},
+    "addr": "3938 Foundry St, Alder Falls",
+    "phone": "(555) 555-0105",
+    "lang": "Spanish",
+    "income": null,
+    "rdate": "2026-10-07",
+    "decided": "Decision recorded Oct 4",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10694",
+    "name": "Joanne Xiong",
+    "hh": 2,
+    "due": "2026-11-30",
+    "ver": {
+      "inc": "r",
+      "id": "r",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-08",
+        "Pay statement uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-08",
+        "Photo ID uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {},
+    "addr": "3356 Foundry St, Alder Falls",
+    "phone": "(555) 555-0150",
+    "lang": "Haitian Creole",
+    "income": "$2,600 per month, reported",
+    "rdate": "2026-10-08",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10700",
+    "name": "Odalys Jankowski",
+    "hh": 1,
+    "due": "2026-11-19",
+    "ver": {
+      "inc": "a",
+      "id": "a",
+      "res": "a",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-07",
+        "Document request recorded: residency (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-07",
+        "Document request recorded: identity (phone call (logged))",
+        "You"
+      ],
+      [
+        "2026-10-07",
+        "Document request recorded: income (phone call (logged))",
+        "You"
+      ]
+    ],
+    "req": {
+      "res": {
+        "d": "2026-10-07",
+        "via": "Phone call (logged)"
+      },
+      "id": {
+        "d": "2026-10-07",
+        "via": "Phone call (logged)"
+      },
+      "inc": {
+        "d": "2026-10-07",
+        "via": "Phone call (logged)"
+      }
+    },
+    "addr": "68 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0141",
+    "lang": "Spanish",
+    "income": "$2,380 per month, reported",
+    "rdate": "2026-10-07",
+    "fu": "2026-10-20",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10710",
+    "name": "Imani Nwosu",
+    "hh": 2,
+    "due": "2026-11-19",
+    "ver": {
+      "inc": "a",
+      "id": "v",
+      "res": "r",
+      "hh": "r",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-02",
+        "Document request recorded: income (mailed letter)",
+        "You"
+      ],
+      [
+        "2026-10-09",
+        "Utility bill uploaded",
+        "Portal"
+      ],
+      [
+        "2026-10-09",
+        "Household members form uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "inc": {
+        "d": "2026-10-02",
+        "via": "Mailed letter"
+      }
+    },
+    "dx": {
+      "hh": {
+        "members": 1,
+        "signed": false
+      }
+    },
+    "addr": "132 Tamarack Way, Alder Falls",
+    "phone": "(555) 555-0121",
+    "lang": "Korean",
+    "income": "$1,680 per month, reported",
+    "rdate": "2026-10-09",
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10720",
+    "name": "Esperanza Bellamy",
+    "hh": 1,
+    "due": "2026-11-19",
+    "ver": {
+      "inc": "r",
+      "id": "v",
+      "res": "a",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [
+      [
+        "2026-10-03",
+        "Document request recorded: residency (portal message)",
+        "You"
+      ],
+      [
+        "2026-10-11",
+        "Pay statement uploaded",
+        "Portal"
+      ]
+    ],
+    "req": {
+      "res": {
+        "d": "2026-10-03",
+        "via": "Portal message"
+      }
+    },
+    "addr": "2278 Millrace Dr, Alder Falls",
+    "phone": "(555) 555-0114",
+    "lang": "Korean",
+    "income": "$2,315 per month, reported",
+    "rdate": "2026-10-11",
+    "dx": {},
+    "vinfo": {}
+  },
+  {
+    "id": "RC-10735",
+    "name": "Yusuf Delacroix",
+    "hh": 2,
+    "due": "2026-12-06",
+    "ver": {
+      "inc": "m",
+      "id": "m",
+      "res": "v",
+      "hh": "v",
+      "shl": "v"
+    },
+    "ev": [],
+    "req": {},
+    "addr": "918 Birchmoor Ave, Alder Falls",
+    "phone": "(555) 555-0145",
+    "lang": "Vietnamese",
+    "income": "$3,780 per month, reported",
+    "rdate": "2026-10-08",
+    "dx": {},
+    "vinfo": {}
+  }
+]
