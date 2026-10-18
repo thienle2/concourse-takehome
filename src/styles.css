@@ -181,12 +181,6 @@ table.queue { width: 100%; border-collapse: collapse; font-size: 14px; }
 .urgency-today { color: var(--red); }
 .cell-sub { font-size: 12px; color: var(--ink-3); }
 .lock-tag { display: inline-flex; gap: 4px; align-items: center; font-size: 12px; color: var(--gray); margin-top: 4px; }
-.docbar { display: flex; gap: 3px; margin-bottom: 4px; }
-.docbar span { width: 18px; height: 6px; border-radius: 3px; background: var(--gray-bg); }
-.docbar .seg-v { background: var(--green); }
-.docbar .seg-r { background: var(--blue); }
-.docbar .seg-a { background: #d39b3a; }
-.docbar .seg-m { background: repeating-linear-gradient(45deg, var(--red), var(--red) 2px, var(--red-bg) 2px, var(--red-bg) 4px); }
 
 .pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; font-size: 14px; }
 .pager-pages { display: flex; gap: 4px; flex-wrap: wrap; }

@@ -3,7 +3,7 @@ import { fmtLong, fmtShort, TODAY } from '../lib/date';
 import { STATUS_LABEL } from '../lib/labels';
 import { DEFAULT_VIEW, filterCases, isWorkable, PAGE_SIZE, statusOptions, TABS, type QueueView, type SortKey } from '../lib/queue';
 import { docsSummary, isOpen, lastActivity, needsAction } from '../lib/status';
-import { REQ_KEYS, type Case, type CaseStatus } from '../lib/types';
+import type { Case, CaseStatus } from '../lib/types';
 import { DueCell, SnoozeTag, StatusPill } from './bits';
 
 interface Props {
@@ -222,9 +222,6 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
                           <div><SnoozeTag c={c} /></div>
                         </td>
                         <td data-label="Documents">
-                          <div className="docbar" aria-hidden="true">
-                            {REQ_KEYS.map((k) => <span key={k} className={`seg-${c.ver[k] ?? 'm'}`} />)}
-                          </div>
                           <div>{docs.verified} of 5 verified</div>
                           {docs.parts.length > 0 && <div className="cell-sub">{docs.parts.join(', ')}</div>}
                         </td>
