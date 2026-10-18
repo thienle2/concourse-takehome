@@ -285,7 +285,17 @@ table.queue { width: 100%; border-collapse: collapse; font-size: 14px; }
 .paper-watermark { position: absolute; right: 14px; top: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #b4a98a; text-transform: uppercase; }
 .paper-issuer { font-weight: 600; font-size: 13px; color: #6b5f3f; }
 .paper-title { font-size: 17px; font-weight: 600; margin: 2px 0 12px; }
-.paper dl { display: grid; grid-template-columns: minmax(120px, 40%) 1fr; gap: 6px 14px; margin: 0; }
+.paper dl { display: grid; grid-template-columns: minmax(120px, 40%) 1fr; gap: 4px 14px; margin: 0; }
+.paper-issuer-detail { font-size: 12px; color: #6b5f3f; margin-top: 2px; }
+.paper-section { border-top: 1px solid #e8e2d2; padding-top: 10px; margin-top: 12px; }
+.paper-section h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #6b5f3f; margin: 0 0 6px; }
+.paper-table-wrap { overflow-x: auto; }
+.paper-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.paper-table th { text-align: left; font-weight: 500; color: #6b5f3f; border-bottom: 1px solid #e8e2d2; padding: 4px 6px; white-space: nowrap; }
+.paper-table td { padding: 4px 6px; border-bottom: 1px dashed #efe9da; vertical-align: top; }
+.paper-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.paper-table tbody tr:last-child td { border-bottom: none; }
+.paper-footer { font-size: 11px; color: #6b5f3f; margin-top: 12px; font-style: italic; }
 .paper dt { color: #6b5f3f; font-size: 13px; }
 .paper dd { margin: 0; overflow-wrap: anywhere; }
 table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }

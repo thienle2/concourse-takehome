@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { formatAddress } from '../lib/address';
 import { fmtDate } from '../lib/date';
-import { buildDocument, hasMismatch, trustSummary, type CompareRow, type Trust } from '../lib/documents';
+import { buildDocument, hasMismatch, trustSummary, type CompareRow, type DocTable, type Trust } from '../lib/documents';
 import { REJECT_REASONS, REQ_ASK, REQ_DOC, REQ_LABEL, REQUEST_CHANNELS } from '../lib/labels';
 import { isReadOnly, readOnlyReason, receivedDate } from '../lib/status';
 import type { Case, ReqKey } from '../lib/types';
@@ -88,15 +88,26 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
       <figure className="paper" style={{ margin: 0 }} aria-label={`${doc.title} (sample document)`}>
         <span className="paper-watermark">Sample · fictional</span>
         <div className="paper-issuer">{doc.issuer}</div>
+        {doc.issuerDetail && <div className="paper-issuer-detail">{doc.issuerDetail}</div>}
         <div className="paper-title">{doc.title}</div>
-        <dl>
-          {doc.fields.map((f) => (
-            <div key={f.label} style={{ display: 'contents' }}>
-              <dt>{f.label}</dt>
-              <dd>{f.value}</dd>
-            </div>
-          ))}
-        </dl>
+        {doc.sections.map((sec, i) => (
+          <Fragment key={sec.heading}>
+            <section className="paper-section">
+              <h4>{sec.heading}</h4>
+              <dl>
+                {sec.fields.map((f) => (
+                  <div key={f.label} style={{ display: 'contents' }}>
+                    <dt>{f.label}</dt>
+                    <dd>{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+            {doc.tables.filter((t) => t.afterSection === i).map((t) => <PaperTable key={t.heading} t={t} />)}
+          </Fragment>
+        ))}
+        {doc.tables.filter((t) => t.afterSection == null || t.afterSection >= doc.sections.length).map((t) => <PaperTable key={t.heading} t={t} />)}
+        {doc.footer && <p className="paper-footer">{doc.footer}</p>}
         {receivedDate(c, reqKey) && <figcaption className="small muted" style={{ marginTop: 12 }}>Received {fmtDate(receivedDate(c, reqKey)!)}</figcaption>}
       </figure>
 
@@ -395,6 +406,27 @@ function AttachedFiles({ files }: { files: Attachment[] }) {
       <p className="hint" style={{ marginTop: 8 }}>
         The prototype can't read uploaded files, so the details compared below come from a sample document.
       </p>
+    </section>
+  );
+}
+
+function PaperTable({ t }: { t: DocTable }) {
+  const num = (i: number) => (t.numeric?.includes(i) ? 'num' : undefined);
+  return (
+    <section className="paper-section">
+      <h4>{t.heading}</h4>
+      <div className="paper-table-wrap">
+        <table className="paper-table">
+          <thead>
+            <tr>{t.columns.map((col, i) => <th key={col} scope="col" className={num(i)}>{col}</th>)}</tr>
+          </thead>
+          <tbody>
+            {t.rows.map((row, r) => (
+              <tr key={r}>{row.map((cell, i) => <td key={i} className={num(i)}>{cell}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

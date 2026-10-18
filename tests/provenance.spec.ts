@@ -48,8 +48,47 @@ test('placeholder rules are marked as rules, and missing records have no source'
 
 test('summary calls out self-reported details', () => {
   expect(trustSummary(buildDocument(byId('RC-10275'), 'inc'))).toBe(
-    "1 of 2 details are checked against verified records. Monthly income is only self-reported, so a match there doesn't confirm it.",
+    "3 of 4 details are checked against verified records. Monthly income is only self-reported, so a match there doesn't confirm it.",
   );
   expect(trustSummary(buildDocument(mk('rrrrr'), 'inc'))).toMatch(/^None of these details have been verified yet\./);
-  expect(trustSummary(buildDocument(mk('vvvvr'), 'shl'))).toBe('All 3 details are checked against verified records.');
+  expect(trustSummary(buildDocument(mk('vvvvr'), 'shl'))).toBe('All 4 details are checked against verified records.');
+});
+
+test('documents are dense and internally consistent', () => {
+  const c = byId('RC-10275');
+  const pay = buildDocument(c, 'inc');
+  const earnings = pay.tables.find((t) => t.heading === 'Earnings')!;
+  const deductions = pay.tables.find((t) => t.heading === 'Deductions')!;
+  expect(deductions.rows.length).toBeGreaterThanOrEqual(6);
+  const amount = (v: string) => Number(v.replace(/[$,]/g, ''));
+  const gross = amount(earnings.rows[0][3]);
+  const totalDed = deductions.rows.reduce((a, r) => a + amount(r[1]), 0);
+  const summary = Object.fromEntries(pay.sections.find((x) => x.heading === 'Summary')!.fields.map((f) => [f.label, f.value]));
+  expect(amount(summary['Net pay'])).toBeCloseTo(gross - totalDed, 1);
+
+  // The household form and the lease list the same people.
+  const hhCase = byId('RC-10106');
+  const form = buildDocument(hhCase, 'hh').tables[0].rows.map((r) => r[1]);
+  const lease = buildDocument(hhCase, 'shl').tables[0].rows.map((r) => r[0]);
+  expect(lease).toEqual(form);
+
+  for (const k of ['inc', 'id', 'res', 'hh', 'shl'] as const) {
+    const d = buildDocument(c, k);
+    const fieldCount = d.sections.reduce((a, x) => a + x.fields.length, 0) + d.tables.reduce((a, t) => a + t.rows.length * t.columns.length, 0);
+    expect(fieldCount, k).toBeGreaterThan(15);
+    expect(d.compare.length, k).toBeGreaterThanOrEqual(5);
+  }
+});
+
+test('planted mismatches still show, and clean documents stay clean', () => {
+  const hhRow = (id: string, label: string) => buildDocument(byId(id), 'hh').compare.find((r) => r.label === label)!;
+  expect(hhRow('RC-10326', 'People in household').result).toBe('mismatch'); // form lists 7, record says 8
+  expect(hhRow('RC-10326', 'Signature (placeholder rule: required)').result).toBe('mismatch');
+  for (const c of allCases) {
+    for (const k of ['inc', 'id', 'res', 'hh', 'shl'] as const) {
+      if (c.dx[k]) continue;
+      const bad = buildDocument(c, k).compare.filter((r) => r.result === 'mismatch').map((r) => r.label);
+      expect(bad, `${c.id} ${k}`).toEqual([]);
+    }
+  }
 });
