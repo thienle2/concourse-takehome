@@ -322,7 +322,14 @@ table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
 .diff-actions { display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; font-size: 13px; }
 .diff-actions .link-btn { font-size: 13px; }
 .diffs > .fact-form { margin-top: 10px; }
-.compare tr.update-row td { background: #f8f9fc; padding: 12px; }
+.compare tr.update-row td { background: #f3f5fb; padding: 12px; border-left: 3px solid var(--focus); }
+.edit-cell { display: flex; margin-top: 8px; min-height: 36px; padding: 0 12px; font-size: 13px; }
+.edit-cell.edit-mismatch { background: var(--ink); color: #fff; }
+.edit-cell.edit-mismatch:hover { background: #1a1a5e; }
+.fact-inline .field + .field { margin-top: 0; }
+.fact-inline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 12px; margin-bottom: 6px; }
+.inline-link { min-height: 0; font-size: 13px; }
+.fact-warning { font-size: 12px; color: var(--amber); font-weight: 500; margin-top: 4px; }
 .fact-form { background: #f8f9fc; border-radius: var(--radius-sm); padding: 16px; }
 .compare .fact-form { padding: 4px 0 0; }
 .fact-change { font-size: 14px; margin-bottom: 4px; }

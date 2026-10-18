@@ -24,55 +24,86 @@ export function documentSource(c: Case, reqKey: ReqKey): string {
   return `${REQ_DOC[reqKey]}${rd ? ` received ${fmtShort(rd)}` : ''}`;
 }
 
-/** Update one case fact to what a document shows. Opened from a mismatched comparison row. */
-export function RowUpdateForm({ c, reqKey, field, value, onDone }: { c: Case; reqKey: ReqKey; field: FactField; value: string; onDone: () => void }) {
+/**
+ * Edit one case fact in place, from a row of the document comparison. Pre-filled with the
+ * document's value when it differs from the case; the document is recorded as the source.
+ */
+export function InlineFactEditor({ c, reqKey, field, docValue, onDone }: { c: Case; reqKey: ReqKey; field: FactField; docValue: string; onDone: () => void }) {
   const { save } = useStore();
+  const current = factValue(c, field) ?? '';
+  const [value, setValue] = useState(docValue !== current ? docValue : current);
   const [reason, setReason] = useState('');
   const [errors, setErrors] = useState<FieldError[]>([]);
   const [failed, setFailed] = useState(false);
-  const id = `upd-${field}`;
+  const id = `fe-${field}`;
   const source = documentSource(c, reqKey);
-  const checked = validateFact(field, value);
   const warning = verifiedWarning(c, field);
+  const err = (k: string) => errors.find((e) => e.id === k)?.message;
 
-  useEffect(() => document.getElementById(`${id}-reason`)?.focus(), [id]);
+  useEffect(() => document.getElementById(`${id}-value`)?.focus(), [id]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setFailed(false);
     const errs: FieldError[] = [];
-    if (checked.error) errs.push({ id: `${id}-reason`, message: `The document's value can't be used: ${checked.error}` });
-    if (!reason.trim()) errs.push({ id: `${id}-reason`, message: 'Say why the case record should change' });
-    const lim = noteLimitError(reason);
-    if (lim) errs.push({ id: `${id}-reason`, message: lim });
+    const checked = validateFact(field, value);
+    if (checked.error) errs.push({ id: `${id}-value`, message: checked.error });
+    else if ((checked.value ?? '') === current) errs.push({ id: `${id}-value`, message: 'That is already the value on the case.' });
+    if (!reason.trim()) errs.push({ id: `${id}-reason`, message: 'Add a short reason for the change.' });
+    else if (reason.length > 200) errs.push({ id: `${id}-reason`, message: 'Keep the reason to 200 characters.' });
     setErrors(errs);
-    if (errs.length) return;
+    if (errs.length) {
+      document.getElementById(errs[0].id)?.focus();
+      return;
+    }
     const res = save(c.id, { type: 'updateFacts', changes: [{ field, value: checked.value }], source, reason });
     if (res.ok) onDone();
     else setFailed(true);
   };
 
   return (
-    <form className="fact-form" onSubmit={submit} noValidate data-testid={`update-form-${field}`}>
-      <ErrorSummary errors={errors} />
+    <form className="fact-inline" onSubmit={submit} noValidate data-testid={`fact-editor-${field}`}>
       <NotSaved show={failed} />
-      <p className="fact-change">
-        Change <strong>{FACT_LABEL[field].toLowerCase()}</strong> on the case from <span className="old-value">{factDisplay(field, factValue(c, field))}</span> to{' '}
-        <strong>{factDisplay(field, checked.value)}</strong>
+      <div className="fact-inline-row">
+        <div className="field">
+          <label className="label" htmlFor={`${id}-value`}>New {FACT_LABEL[field].toLowerCase()}</label>
+          <input
+            id={`${id}-value`}
+            className={`input${err(`${id}-value`) ? ' invalid' : ''}`}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            inputMode={field === 'hh' || field === 'income' ? 'numeric' : field === 'phone' ? 'tel' : undefined}
+            aria-invalid={!!err(`${id}-value`) || undefined}
+            aria-describedby={`${id}-ctx${err(`${id}-value`) ? ` ${id}-value-err` : ''}`}
+          />
+          {err(`${id}-value`) && <span className="field-error" id={`${id}-value-err`}>{err(`${id}-value`)}</span>}
+        </div>
+        <div className="field">
+          <label className="label" htmlFor={`${id}-reason`}>Reason (required)</label>
+          <input
+            id={`${id}-reason`}
+            className={`input${err(`${id}-reason`) ? ' invalid' : ''}`}
+            value={reason}
+            placeholder="e.g. Household confirmed by phone"
+            onChange={(e) => setReason(e.target.value)}
+            aria-invalid={!!err(`${id}-reason`) || undefined}
+            aria-describedby={err(`${id}-reason`) ? `${id}-reason-err` : undefined}
+          />
+          {err(`${id}-reason`) && <span className="field-error" id={`${id}-reason-err`}>{err(`${id}-reason`)}</span>}
+        </div>
+      </div>
+      <p className="hint" id={`${id}-ctx`}>
+        Case has {factDisplay(field, current || null)} · document shows {factDisplay(field, docValue || null)}
+        {value !== docValue && (
+          <>
+            {' · '}
+            <button type="button" className="link-btn inline-link" onClick={() => setValue(docValue)}>Use document value</button>
+          </>
+        )}
       </p>
-      <p className="hint">Source: {source}. The old value stays in the case history.</p>
-      {warning && <Notice tone="warn">{warning}</Notice>}
-      <NoteField
-        id={`${id}-reason`}
-        label="Why should the record change? (required)"
-        hint="For example: household confirmed the change by phone."
-        value={reason}
-        onChange={setReason}
-        error={errors.find((x) => x.id === `${id}-reason`)?.message}
-        rows={2}
-      />
-      <div className="row" style={{ marginTop: 10 }}>
-        <button type="submit" className="btn btn-primary btn-sm">Update case record</button>
+      {warning && <p className="fact-warning"><span aria-hidden="true">▲</span> {warning}</p>}
+      <div className="row" style={{ marginTop: 8 }}>
+        <button type="submit" className="btn btn-primary btn-sm">Save to case</button>
         <button type="button" className="btn btn-ghost btn-sm" onClick={onDone}>Cancel</button>
       </div>
     </form>

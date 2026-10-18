@@ -8,7 +8,7 @@ import type { Case, ReqKey } from '../lib/types';
 import { formatBytes, isImage, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
 import { ErrorSummary, Notice, NotSaved, ReqPill, type FieldError } from './bits';
-import { CaseDetailsForm, documentSource, RowUpdateForm } from './FactEdit';
+import { InlineFactEditor } from './FactEdit';
 import { NoteField, noteLimitError } from './NoteField';
 
 export type PopMode = 'review' | 'view' | 'request';
@@ -82,11 +82,14 @@ export function DocPanel({ c, mode, reqKey, onClose }: Props) {
 
 function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mode: 'review' | 'view'; onDone: () => void }) {
   const doc = useMemo(() => buildDocument(c, reqKey), [c, reqKey]);
-  // Which row's update form is open, and where it was opened from (top box or comparison table).
-  const [updating, setUpdating] = useState<{ label: string; at: 'top' | 'table' } | null>(null);
-  const [editingAll, setEditingAll] = useState(false);
-  const toggle = (label: string, at: 'top' | 'table') =>
-    setUpdating(updating?.label === label && updating.at === at ? null : { label, at });
+  // The comparison row whose case value is being edited.
+  const [editing, setEditing] = useState<string | null>(null);
+  const rowId = (label: string) => `cmp-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  /** Opens a row's editor from the differences summary and brings it into view. */
+  const editFromSummary = (label: string) => {
+    setEditing(label);
+    requestAnimationFrame(() => document.getElementById(rowId(label))?.scrollIntoView({ block: 'center' }));
+  };
   const canUpdate = !isReadOnly(c);
   const vinfo = c.vinfo[reqKey];
   const status = c.ver[reqKey];
@@ -109,39 +112,17 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
                       </div>
                     </div>
                     {r.update && canUpdate ? (
-                      <button
-                        type="button"
-                        className="btn btn-sm"
-                        aria-expanded={updating?.label === r.label && updating.at === 'top'}
-                        onClick={() => toggle(r.label, 'top')}
-                      >
-                        {updating?.label === r.label && updating.at === 'top' ? 'Cancel' : 'Update record'}
-                        <span className="sr-only"> for {r.label.toLowerCase()}</span>
+                      <button type="button" className="btn btn-sm" onClick={() => editFromSummary(r.label)}>
+                        Edit<span className="sr-only"> {r.label.toLowerCase()} on the case</span>
                       </button>
                     ) : r.source?.trust === 'rule' ? (
                       <span className="small muted">Can't be fixed on the case. Reject or request a new copy.</span>
                     ) : null}
                   </div>
-                  {updating?.label === r.label && updating.at === 'top' && r.update && (
-                    <RowUpdateForm c={c} reqKey={reqKey} field={r.update.field} value={r.update.value} onDone={() => setUpdating(null)} />
-                  )}
                 </li>
               ))}
           </ul>
         )}
-        {canUpdate && (
-          <div className="diff-actions">
-            {!editingAll && (
-              <button type="button" className="link-btn" onClick={() => setEditingAll(true)}>
-                Something else out of date? Edit case details
-              </button>
-            )}
-            <a className="link-btn" href="#compare-title" onClick={(e) => { e.preventDefault(); document.getElementById('compare-title')?.scrollIntoView({ block: 'start' }); }}>
-              See full comparison ↓
-            </a>
-          </div>
-        )}
-        {editingAll && <CaseDetailsForm c={c} defaultSource={documentSource(c, reqKey)} onDone={() => setEditingAll(false)} />}
       </section>
       {!!c.rinfo[reqKey]?.files?.length && <AttachedFiles files={c.rinfo[reqKey]!.files!} />}
       <figure className="paper" style={{ margin: 0 }} aria-label={`${doc.title} (sample document)`}>
@@ -189,7 +170,7 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
           <tbody>
             {doc.compare.map((r) => (
               <Fragment key={r.label}>
-              <tr className={r.result === 'mismatch' ? 'is-mismatch' : undefined}>
+              <tr id={rowId(r.label)} className={r.result === 'mismatch' ? 'is-mismatch' : undefined}>
                 <th scope="row" style={{ fontWeight: 500, fontSize: 14, color: 'var(--ink)' }}>{r.label}</th>
                 <td data-label="On document">{r.doc}</td>
                 <td data-label="Compared against">
@@ -199,29 +180,27 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
                       <span aria-hidden="true">{SOURCE_ICON[r.source.trust]}</span> {r.source.label}
                     </span>
                   )}
+                  {r.update && canUpdate && editing !== r.label && (
+                    <button
+                      type="button"
+                      className={`btn btn-sm edit-cell${r.result === 'mismatch' ? ' edit-mismatch' : ''}`}
+                      onClick={() => setEditing(r.label)}
+                    >
+                      <span aria-hidden="true">✎</span> Edit<span className="sr-only"> {r.label.toLowerCase()} on the case</span>
+                    </button>
+                  )}
                 </td>
                 <td data-label="Result">
                   <span className={`pill pill-wrap ${resultFor(r).tone}`}>
                     <span className="pill-icon" aria-hidden="true">{resultFor(r).icon}</span>
                     {resultFor(r).text}
                   </span>
-                  {r.result === 'mismatch' && r.update && canUpdate && (
-                    <button
-                      type="button"
-                      className="link-btn update-link"
-                      aria-expanded={updating?.label === r.label && updating.at === 'table'}
-                      onClick={() => toggle(r.label, 'table')}
-                    >
-                      {updating?.label === r.label && updating.at === 'table' ? 'Cancel update' : 'Update record'}
-                      <span className="sr-only"> for {r.label.toLowerCase()}</span>
-                    </button>
-                  )}
                 </td>
               </tr>
-              {updating?.label === r.label && updating.at === 'table' && r.update && (
+              {editing === r.label && r.update && (
                 <tr className="update-row">
                   <td colSpan={4}>
-                    <RowUpdateForm c={c} reqKey={reqKey} field={r.update.field} value={r.update.value} onDone={() => setUpdating(null)} />
+                    <InlineFactEditor c={c} reqKey={reqKey} field={r.update.field} docValue={r.update.value} onDone={() => setEditing(null)} />
                   </td>
                 </tr>
               )}

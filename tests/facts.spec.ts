@@ -64,22 +64,27 @@ async function openPayStatement(page: Page) {
   return page.getByTestId('popout');
 }
 
-test('update the record from a mismatch, then verify without a mismatch note', async ({ page }) => {
+test('edit a mismatched value right in the comparison row, then verify without a mismatch note', async ({ page }) => {
   const pop = await openPayStatement(page);
-  await pop.getByTestId('differences').getByRole('button', { name: 'Update record for name' }).click();
-  const form = pop.getByTestId('update-form-name');
-  await expect(form).toContainText('Change head of household name on the case from Tyrone Basset to Tyrone Bassett');
-  await expect(form).toContainText('verified from the photo ID');
-  await form.getByRole('button', { name: 'Update case record' }).click();
-  await expect(form.locator('.error-summary')).toContainText('Say why the case record should change');
+  const compare = pop.getByTestId('compare');
+  await compare.getByRole('button', { name: 'Edit name on the case' }).click();
+  const editor = pop.getByTestId('fact-editor-name');
+  // Pre-filled with what the document says.
+  await expect(editor.getByLabel('New head of household name')).toHaveValue('Tyrone Bassett');
+  await expect(editor).toContainText('Case has Tyrone Basset · document shows Tyrone Bassett');
+  await expect(editor).toContainText('verified from the photo ID');
 
-  await form.getByLabel(/Why should the record change/).fill('Household confirmed the spelling by phone.');
-  await form.getByRole('button', { name: 'Update case record' }).click();
+  await editor.getByRole('button', { name: 'Save to case' }).click();
+  await expect(editor).toContainText('Add a short reason for the change.');
+  await expect(editor.getByLabel('Reason (required)')).toBeFocused();
+
+  await editor.getByLabel('Reason (required)').fill('Household confirmed the spelling by phone.');
+  await editor.getByRole('button', { name: 'Save to case' }).click();
 
   await expect(page.getByTestId('toast')).toContainText('Case record updated: head of household name from Tyrone Basset to Tyrone Bassett.');
   await expect(page.locator('#case-title')).toHaveText('Tyrone Bassett');
-  await expect(pop.getByTestId('compare')).toContainText('Matches value you updated');
-  await expect(pop.getByTestId('compare')).not.toContainText('Does not match');
+  await expect(compare).toContainText('Matches value you updated');
+  await expect(compare).not.toContainText('Does not match');
 
   // The mismatch is resolved, so verifying no longer needs a note.
   for (const i of [0, 1, 2]) await pop.locator(`#confirm-${i}`).check();
@@ -88,15 +93,54 @@ test('update the record from a mismatch, then verify without a mismatch note', a
   await expect(page.getByTestId('activity-feed')).toContainText('Case record updated (Pay statement received Oct 10)');
 });
 
+test('the inline editor checks the value and lets the worker type their own', async ({ page }) => {
+  const pop = await openPayStatement(page);
+  await pop.getByTestId('compare').getByRole('button', { name: 'Edit monthly income on the case' }).click();
+  const editor = pop.getByTestId('fact-editor-income');
+  await expect(editor.getByLabel('New monthly income')).toHaveValue('2640'); // matches the case already
+  await editor.getByLabel('Reason (required)').fill('Raise effective October.');
+  await editor.getByRole('button', { name: 'Save to case' }).click();
+  await expect(editor).toContainText('That is already the value on the case.');
+  await editor.getByLabel('New monthly income').fill('abc');
+  await editor.getByRole('button', { name: 'Save to case' }).click();
+  await expect(editor).toContainText('Enter a monthly amount in dollars');
+  await editor.getByLabel('New monthly income').fill('2,800');
+  await expect(editor.getByRole('button', { name: 'Use document value' })).toBeVisible();
+  await editor.getByRole('button', { name: 'Save to case' }).click();
+  await expect(page.getByTestId('toast')).toContainText('monthly income from $2,640 per month to $2,800 per month');
+});
+
 test('undo restores the old value', async ({ page }) => {
   const pop = await openPayStatement(page);
-  await pop.getByTestId('differences').getByRole('button', { name: 'Update record for name' }).click();
-  await pop.getByLabel(/Why should the record change/).fill('Typo on file.');
-  await pop.getByRole('button', { name: 'Update case record' }).click();
+  await pop.getByTestId('compare').getByRole('button', { name: 'Edit name on the case' }).click();
+  await pop.getByLabel('Reason (required)').fill('Typo on file.');
+  await pop.getByRole('button', { name: 'Save to case' }).click();
   await expect(page.locator('#case-title')).toHaveText('Tyrone Bassett');
   await page.getByTestId('toast').getByRole('button', { name: 'Undo' }).click();
   await expect(page.locator('#case-title')).toHaveText('Tyrone Basset');
   await expect(pop.getByTestId('compare')).toContainText('Does not match verified record');
+});
+
+test('the differences summary jumps to the row editor', async ({ page }) => {
+  const pop = await openPayStatement(page);
+  const diffs = pop.getByTestId('differences');
+  await expect(diffs).toContainText("1 of 5 checked details doesn't match");
+  await expect(diffs).toContainText('Document: Tyrone Bassett · Case: Tyrone Basset');
+  await diffs.getByRole('button', { name: 'Edit name on the case' }).click();
+  await expect(pop.getByTestId('fact-editor-name')).toBeVisible();
+  await expect(pop.getByLabel('New head of household name')).toBeFocused();
+
+  // A clean document says so, and its rows can still be edited.
+  await page.goto('/#/case/RC-10555');
+  await page.getByTestId('req-id').getByRole('button', { name: 'Review document' }).click();
+  const clean = page.getByTestId('popout');
+  await expect(clean.getByTestId('differences')).toContainText('All 4 checked details match the case');
+  await clean.getByTestId('compare').getByRole('button', { name: 'Edit street address on the case' }).click();
+  await clean.getByLabel('New street address').fill('2829 Millrace Dr, Apt 4');
+  await clean.getByLabel('Reason (required)').fill('Unit number missing from the record.');
+  await clean.getByRole('button', { name: 'Save to case' }).click();
+  await expect(page.getByTestId('toast')).toContainText('street address from 2829 Millrace Dr to 2829 Millrace Dr, Apt 4');
+  await expect(page.getByTestId('activity-feed')).toContainText('Case record updated (Photo ID received Oct 5)');
 });
 
 test('edit household details with a source and reason', async ({ page }) => {
@@ -130,30 +174,3 @@ test('read-only cases cannot be edited', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Edit details' })).toHaveCount(0);
 });
 
-test('every review shows a differences summary at the top', async ({ page }) => {
-  const pop = await openPayStatement(page);
-  const diffs = pop.getByTestId('differences');
-  await expect(diffs).toContainText("1 of 5 checked details doesn't match");
-  await expect(diffs).toContainText('Document: Tyrone Bassett · Case: Tyrone Basset');
-
-  // A clean document says so, and still offers a way to correct the record.
-  await page.goto('/#/case/RC-10555');
-  await page.getByTestId('req-id').getByRole('button', { name: 'Review document' }).click();
-  const clean = page.getByTestId('popout').getByTestId('differences');
-  await expect(clean).toContainText('All 4 checked details match the case');
-  await expect(clean.getByRole('button', { name: /Edit case details/ })).toBeVisible();
-});
-
-test('edit case details from inside a document review, with the document as the source', async ({ page }) => {
-  await page.goto('/#/case/RC-10555');
-  await page.getByTestId('req-id').getByRole('button', { name: 'Review document' }).click();
-  const pop = page.getByTestId('popout');
-  await pop.getByRole('button', { name: /Edit case details/ }).click();
-  const form = pop.getByTestId('case-details-form');
-  await expect(form.getByLabel('Where did the new information come from?')).toHaveValue('Photo ID received Oct 5');
-  await form.getByLabel('Language').fill('Spanish and English');
-  await form.getByLabel(/Why is it changing/).fill('ID shows bilingual preference; household confirmed.');
-  await form.getByRole('button', { name: 'Save changes' }).click();
-  await expect(page.getByTestId('toast')).toContainText('Case record updated: language from Spanish to Spanish and English.');
-  await expect(page.getByTestId('activity-feed')).toContainText('Case record updated (Photo ID received Oct 5)');
-});
