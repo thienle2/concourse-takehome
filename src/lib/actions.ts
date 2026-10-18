@@ -2,6 +2,7 @@ import { fmtDate, fmtShort, TODAY } from './date';
 import { REQ_DOC, REQ_LABEL, REQ_STATUS_LABEL, STATUS_LABEL } from './labels';
 import { caseStatus, isSnoozed } from './status';
 import type { Attachment } from './attachments';
+import { applyFact, factDisplay, factValue, FACT_LABEL, type FactChange, type FactEdit } from './facts';
 import type { Case, HistoryEvent, ReqKey } from './types';
 
 export const ME = 'You';
@@ -16,6 +17,7 @@ export type CaseAction =
   | { type: 'markReady'; note: string }
   | { type: 'unready'; reason: string }
   | { type: 'remindSupervisor'; note: string }
+  | { type: 'updateFacts'; changes: FactChange[]; source: string; reason: string }
   | { type: 'note'; text: string };
 
 export interface ActionResult {
@@ -100,6 +102,20 @@ export function applyAction(c: Case, a: CaseAction): ActionResult {
     case 'remindSupervisor': {
       next = withEvent({ ...c, reminders: [...c.reminders, TODAY] }, withNote('Supervisor reminded about pending decision', a.note));
       what = 'Reminder to the supervisor recorded. Nothing was actually sent.';
+      break;
+    }
+    case 'updateFacts': {
+      let updated = c;
+      const edits: FactEdit[] = [];
+      for (const ch of a.changes) {
+        const from = factValue(updated, ch.field);
+        if (from === ch.value) continue;
+        updated = applyFact(updated, ch.field, ch.value);
+        edits.push({ field: ch.field, from, to: ch.value, d: TODAY, by: ME, source: a.source, reason: a.reason.trim() });
+      }
+      const list = edits.map((e) => `${FACT_LABEL[e.field].toLowerCase()} from ${factDisplay(e.field, e.from)} to ${factDisplay(e.field, e.to)}`);
+      next = withEvent({ ...updated, edits: [...c.edits, ...edits] }, withNote(`Case record updated (${a.source}): ${list.join('; ')}`, a.reason));
+      what = `Case record updated: ${list.join('; ')}.`;
       break;
     }
     case 'note': {

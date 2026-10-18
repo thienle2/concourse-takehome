@@ -7,7 +7,9 @@ import { requirementTimeline, stepDate, timelineCount, waitingPhrase } from '../
 import { REQ_KEYS, type Case, type ReqKey } from '../lib/types';
 import { ACCEPT_ATTR, formatBytes, MAX_FILE_BYTES, MAX_FILES, validateFiles, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
+import { editLabel, lastEdit, type FactField } from '../lib/facts';
 import { Activity } from './Activity';
+import { CaseDetailsForm } from './FactEdit';
 import { dueUrgency, Notice, NotProvided, NotSaved, ReqPill, StatusPill } from './bits';
 import { DocPanel, type PopMode } from './DocPanel';
 import { UpdateCase, type UpdateOpen } from './UpdateCase';
@@ -26,6 +28,7 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
   const [pop, setPop] = useState<{ mode: PopMode; key: ReqKey } | null>(null);
   const [update, setUpdate] = useState<UpdateOpen>(null);
   const [receiving, setReceiving] = useState<ReqKey | null>(null);
+  const [editingDetails, setEditingDetails] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const reqBtn = useRef<Partial<Record<ReqKey, HTMLButtonElement | null>>>({});
 
@@ -124,6 +127,7 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
                   </span>
                   <span>Food assistance recertification</span>
                   <span>Assigned to you</span>
+                  {lastEdit(c, 'name') && <span className="edited" style={{ display: 'inline' }}>Name {editLabel(lastEdit(c, 'name')!).charAt(0).toLowerCase() + editLabel(lastEdit(c, 'name')!).slice(1)}</span>}
                 </div>
               </div>
               {/* Every case opens the same placeholder PDF; the data has no application files. */}
@@ -150,22 +154,35 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
                 <Notice tone="lock"><strong>Read only.</strong> {readOnlyReason(c)}</Notice>
               </div>
             )}
-            <dl className="household" aria-label="Household">
-              <div><dt>Household size</dt><dd>{c.hh} {c.hh === 1 ? 'person' : 'people'}</dd></div>
-              <div><dt>Phone</dt><dd>{c.phone ?? <NotProvided />}</dd></div>
-              <div><dt>Language</dt><dd>{c.lang || <NotProvided />}</dd></div>
-              <div><dt>Income</dt><dd>{c.income ?? <NotProvided />}</dd></div>
+            <div className="household-head">
+              <h2 id="household-title">Household details</h2>
+              {!ro && !editingDetails && (
+                <button type="button" className="btn btn-sm" onClick={() => setEditingDetails(true)}>Edit details</button>
+              )}
+            </div>
+            {editingDetails ? (
+              <div style={{ marginTop: 8 }}>
+                <CaseDetailsForm c={c} onDone={() => setEditingDetails(false)} />
+              </div>
+            ) : (
+            <dl className="household" aria-labelledby="household-title">
+              <div><dt>Household size</dt><dd>{c.hh} {c.hh === 1 ? 'person' : 'people'}<Edited c={c} f="hh" /></dd></div>
+              <div><dt>Phone</dt><dd>{c.phone ?? <NotProvided />}<Edited c={c} f="phone" /></dd></div>
+              <div><dt>Language</dt><dd>{c.lang || <NotProvided />}<Edited c={c} f="lang" /></dd></div>
+              <div><dt>Income</dt><dd>{c.income ?? <NotProvided />}<Edited c={c} f="income" /></dd></div>
               <div className="wide address-start">
                 <dt>Address</dt>
                 <dd>
                   {c.address.street || <NotProvided />}
+                  <Edited c={c} f="street" />
                   {c.returned && <div className="small" style={{ color: 'var(--amber)', fontWeight: 500 }}>▲ Mail returned as undeliverable</div>}
                 </dd>
               </div>
-              <div><dt>City</dt><dd>{c.address.city || <NotProvided />}</dd></div>
+              <div><dt>City</dt><dd>{c.address.city || <NotProvided />}<Edited c={c} f="city" /></dd></div>
               <div><dt>State</dt><dd>{c.address.state || <NotProvided />}</dd></div>
               <div><dt>ZIP</dt><dd>{c.address.zip || <NotProvided />}</dd></div>
             </dl>
+            )}
             <p className="household-note">State and ZIP are placeholders. The case data doesn't include them.</p>
           </section>
 
@@ -429,4 +446,10 @@ function ReceiveForm({ c, k, onDone }: { c: Case; k: ReqKey; onDone: () => void 
       <p className="hint" style={{ marginTop: 8 }}>The requirement moves to “Received, needs review”. You review it next.</p>
     </form>
   );
+}
+
+/** "Updated Oct 12 by you · Phone call with household" under a corrected value. */
+function Edited({ c, f }: { c: Case; f: FactField }) {
+  const e = lastEdit(c, f);
+  return e ? <span className="edited">{editLabel(e)}</span> : null;
 }

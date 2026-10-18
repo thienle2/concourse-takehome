@@ -8,6 +8,7 @@ import type { Case, ReqKey } from '../lib/types';
 import { formatBytes, isImage, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
 import { ErrorSummary, Notice, NotSaved, ReqPill, type FieldError } from './bits';
+import { RowUpdateForm } from './FactEdit';
 import { NoteField, noteLimitError } from './NoteField';
 
 export type PopMode = 'review' | 'view' | 'request';
@@ -28,12 +29,14 @@ function resultFor(r: CompareRow): { text: string; icon: string; tone: string } 
       return ok ? { text: 'Matches verified record', icon: '✓', tone: 'tone-green' } : { text: 'Does not match verified record', icon: '✕', tone: 'tone-red' };
     case 'self-reported':
       return ok ? { text: 'Matches self-reported value', icon: '≈', tone: 'tone-blue' } : { text: 'Does not match self-reported value', icon: '✕', tone: 'tone-red' };
+    case 'updated':
+      return ok ? { text: 'Matches value you updated', icon: '✎', tone: 'tone-amber' } : { text: 'Does not match value you updated', icon: '✕', tone: 'tone-red' };
     case 'rule':
       return ok ? { text: 'Meets rule', icon: '✓', tone: 'tone-green' } : { text: 'Does not meet rule', icon: '✕', tone: 'tone-red' };
   }
 }
 
-const SOURCE_ICON: Record<Trust, string> = { verified: '✓', 'self-reported': '◌', rule: '§' };
+const SOURCE_ICON: Record<Trust, string> = { verified: '✓', 'self-reported': '◌', updated: '✎', rule: '§' };
 
 // PLACEHOLDER: the three confirmations are invented wording, not an agency checklist.
 const CONFIRMATIONS = [
@@ -79,6 +82,8 @@ export function DocPanel({ c, mode, reqKey, onClose }: Props) {
 
 function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mode: 'review' | 'view'; onDone: () => void }) {
   const doc = useMemo(() => buildDocument(c, reqKey), [c, reqKey]);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const canUpdate = !isReadOnly(c);
   const vinfo = c.vinfo[reqKey];
   const status = c.ver[reqKey];
   return (
@@ -129,7 +134,8 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
           </thead>
           <tbody>
             {doc.compare.map((r) => (
-              <tr key={r.label} className={r.result === 'mismatch' ? 'is-mismatch' : undefined}>
+              <Fragment key={r.label}>
+              <tr className={r.result === 'mismatch' ? 'is-mismatch' : undefined}>
                 <th scope="row" style={{ fontWeight: 500, fontSize: 14, color: 'var(--ink)' }}>{r.label}</th>
                 <td data-label="On document">{r.doc}</td>
                 <td data-label="Compared against">
@@ -145,8 +151,27 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
                     <span className="pill-icon" aria-hidden="true">{resultFor(r).icon}</span>
                     {resultFor(r).text}
                   </span>
+                  {r.result === 'mismatch' && r.update && canUpdate && (
+                    <button
+                      type="button"
+                      className="link-btn update-link"
+                      aria-expanded={updating === r.label}
+                      onClick={() => setUpdating(updating === r.label ? null : r.label)}
+                    >
+                      {updating === r.label ? 'Cancel update' : 'Update record'}
+                      <span className="sr-only"> for {r.label.toLowerCase()}</span>
+                    </button>
+                  )}
                 </td>
               </tr>
+              {updating === r.label && r.update && (
+                <tr className="update-row">
+                  <td colSpan={4}>
+                    <RowUpdateForm c={c} reqKey={reqKey} field={r.update.field} value={r.update.value} onDone={() => setUpdating(null)} />
+                  </td>
+                </tr>
+              )}
+              </Fragment>
             ))}
           </tbody>
         </table>

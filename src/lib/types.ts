@@ -1,5 +1,6 @@
 import { parseAddress, type Address } from './address';
 import type { Attachment } from './attachments';
+import type { FactEdit } from './facts';
 
 export type ReqKey = 'inc' | 'id' | 'res' | 'hh' | 'shl';
 export const REQ_KEYS: ReqKey[] = ['inc', 'id', 'res', 'hh', 'shl'];
@@ -55,6 +56,8 @@ export interface Case {
   ready: boolean;
   /** Dates the worker reminded the supervisor about this case, oldest first. */
   reminders: string[];
+  /** Corrections to case facts, oldest first. */
+  edits: FactEdit[];
   returned: boolean;
   locked: string | null;
   decided: string | null;
@@ -86,6 +89,7 @@ export function normalizeCase(raw: any): Case {
     fu: raw.fu ?? null,
     ready: raw.ready === true,
     reminders: raw.reminders ?? [],
+    edits: raw.edits ?? [],
     returned: raw.returned === true,
     locked: raw.locked ?? null,
     decided: raw.decided ?? null,

@@ -4,6 +4,7 @@
 import { addDays, daysBetween, fmtDate, fmtShort, parseHumanDate, TODAY } from './date';
 import { cityStateZip, formatAddress, parseAddress, type Address } from './address';
 import { REQ_DOC, REQ_LABEL } from './labels';
+import { editLabel, lastEdit, type FactField } from './facts';
 import type { Case, ReqKey } from './types';
 
 export type CompareResult = 'match' | 'mismatch' | 'none';
@@ -13,7 +14,7 @@ export type CompareResult = 'match' | 'mismatch' | 'none';
  * verified: confirmed earlier by a different document. self-reported: what the household
  * told us, not yet checked. rule: not a case fact at all, a placeholder rule.
  */
-export type Trust = 'verified' | 'self-reported' | 'rule';
+export type Trust = 'verified' | 'self-reported' | 'updated' | 'rule';
 
 export interface RecordSource {
   trust: Trust;
@@ -28,6 +29,8 @@ export interface CompareRow {
   result: CompareResult;
   /** Where the record value came from; null when there's nothing on record. */
   source: RecordSource | null;
+  /** The case fact this row checks, and the document's value, so the worker can update the record. */
+  update?: { field: FactField; value: string };
 }
 
 /** "Photo ID" -> "photo ID": lowercase the first letter only, keeping acronyms. */
@@ -150,15 +153,28 @@ function householdMembers(c: Case, s: number, count: number): Member[] {
 
 export function buildDocument(c: Case, key: ReqKey): FakeDocument {
   /** Compares a document value with a case fact: proven by requirement `from`, or only ever reported. */
-  const compareText = (label: string, doc: string, record: string | null, from?: ReqKey | 'reported'): CompareRow => {
-    if (record == null || !from) return { label, doc, record, result: 'none', source: null };
-    const source: RecordSource = from === 'reported' ? { trust: 'self-reported', label: 'Self-reported on application' } : factSource(c, from, key);
-    return { label, doc, record, result: norm(doc) === norm(record) ? 'match' : 'mismatch', source };
+  const compareText = (
+    label: string,
+    doc: string,
+    record: string | null,
+    from?: ReqKey | 'reported',
+    update?: { field: FactField; value: string },
+  ): CompareRow => {
+    if (record == null || !from) return { label, doc, record, result: 'none', source: null, update };
+    // A worker's correction outranks how the old value was sourced: the new value is theirs.
+    const edit = update ? lastEdit(c, update.field) : null;
+    const source: RecordSource = edit
+      ? { trust: 'updated', label: editLabel(edit) }
+      : from === 'reported'
+        ? { trust: 'self-reported', label: 'Self-reported on application' }
+        : factSource(c, from, key);
+    return { label, doc, record, result: norm(doc) === norm(record) ? 'match' : 'mismatch', source, update };
   };
   const compareAddress = (doc: Address, record: Address): CompareRow[] => [
-    compareText('Street address', doc.street, record.street, 'res'),
-    compareText('City, state, ZIP', cityStateZip(doc), cityStateZip(record), 'res'),
+    compareText('Street address', doc.street, record.street, 'res', { field: 'street', value: doc.street }),
+    compareText('City, state, ZIP', cityStateZip(doc), cityStateZip(record), 'res', { field: 'city', value: doc.city }),
   ];
+  const nameUpdate = (v: string) => ({ field: 'name' as const, value: v });
   const rule = (label: string, doc: string, record: string, ok: boolean): CompareRow => ({ label, doc, record, result: ok ? 'match' : 'mismatch', source: RULE_SOURCE });
 
   const s = seed(c.id);
@@ -253,9 +269,9 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         ],
         footer: 'This statement is for your records. Keep it for tax purposes.',
         compare: [
-          compareText('Name', name, c.name, 'id'),
+          compareText('Name', name, c.name, 'id', nameUpdate(name)),
           ...compareAddress(c.address, c.address),
-          compareText('Monthly income', money(monthly), recordMonthly != null ? money(recordMonthly) : null, 'inc'),
+          compareText('Monthly income', money(monthly), recordMonthly != null ? money(recordMonthly) : null, 'inc', { field: 'income', value: String(monthly) }),
           compareText('Employer', employer, null),
           compareText('Pay frequency', 'Biweekly', null),
           rule(`Pay date (placeholder rule: within ${PAY_STATEMENT_MAX_AGE_DAYS} days)`, `${fmtDate(payDate)} (${age} days ago)`, `On or after ${fmtDate(addDays(TODAY, -PAY_STATEMENT_MAX_AGE_DAYS))}`, age <= PAY_STATEMENT_MAX_AGE_DAYS),
@@ -307,7 +323,7 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         ],
         tables: [],
         compare: [
-          compareText('Name', name, c.name, 'id'),
+          compareText('Name', name, c.name, 'id', nameUpdate(name)),
           ...compareAddress(c.address, c.address),
           compareText('Date of birth', headDob, null),
           compareText('ID number', `D${String(s).slice(0, 7).padStart(7, '0')}`, null),
@@ -392,7 +408,7 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
         ],
         footer: 'Late payments after the due date are charged 1.5% per month.',
         compare: [
-          compareText('Name', name, c.name, 'id'),
+          compareText('Name', name, c.name, 'id', nameUpdate(name)),
           ...compareAddress(c.address, c.address),
           compareText('Account number', `40-${(s % 900000) + 100000}`, null),
           rule(
@@ -466,12 +482,12 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
           },
         ],
         compare: [
-          compareText('Head of household', c.name, c.name, 'id'),
-          compareText('People in household', String(count), String(c.hh), 'hh'),
+          compareText('Head of household', c.name, c.name, 'id', nameUpdate(c.name)),
+          compareText('People in household', String(count), String(c.hh), 'hh', { field: 'hh', value: String(count) }),
           ...compareAddress(c.address, c.address),
-          compareText('Phone', c.phone ?? '(left blank)', c.phone, 'reported'),
-          compareText('Preferred language', c.lang, c.lang, 'reported'),
-          compareText('Total monthly income', money(totalIncome), recordMonthly != null ? money(recordMonthly) : null, 'inc'),
+          compareText('Phone', c.phone ?? '(left blank)', c.phone, 'reported', { field: 'phone', value: c.phone ?? '' }),
+          compareText('Preferred language', c.lang, c.lang, 'reported', { field: 'lang', value: c.lang }),
+          compareText('Total monthly income', money(totalIncome), recordMonthly != null ? money(recordMonthly) : null, 'inc', { field: 'income', value: String(totalIncome) }),
           // PLACEHOLDER: assumes the form must be signed.
           rule('Signature (placeholder rule: required)', signed ? 'Signed' : 'Not signed', 'Signed', signed),
         ],
@@ -549,9 +565,9 @@ export function buildDocument(c: Case, key: ReqKey): FakeDocument {
           },
         ],
         compare: [
-          compareText('Tenant name', c.name, c.name, 'id'),
+          compareText('Tenant name', c.name, c.name, 'id', nameUpdate(c.name)),
           ...compareAddress(addr, c.address),
-          compareText('Occupants listed', String(occupants.length), String(c.hh), 'hh'),
+          compareText('Occupants listed', String(occupants.length), String(c.hh), 'hh', { field: 'hh', value: String(occupants.length) }),
           compareText('Monthly rent', money(rent), null),
           rule('Lease term (placeholder rule: covers today)', `${fmtDate(start)} – ${fmtDate(end)}`, `Includes ${fmtDate(TODAY)}`, start <= TODAY && TODAY <= end),
         ],
@@ -565,12 +581,12 @@ export const hasMismatch = (doc: FakeDocument) => doc.compare.some((r) => r.resu
 /** One-line summary of how much of the comparison rests on verified records. */
 export function trustSummary(doc: FakeDocument): string {
   const facts = doc.compare.filter((r) => r.source && r.source.trust !== 'rule');
-  const weak = facts.filter((r) => r.source!.trust === 'self-reported');
+  const weak = facts.filter((r) => r.source!.trust !== 'verified');
   const strong = facts.length - weak.length;
   if (!facts.length) return 'Nothing on this document can be compared with the case yet.';
   if (!weak.length) return `All ${facts.length} details are checked against verified records.`;
   const names = weak.map((r) => r.label.toLowerCase());
   const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
   const lead = strong ? `${strong} of ${facts.length} details are checked against verified records.` : 'None of these details have been verified yet.';
-  return `${lead} ${list.charAt(0).toUpperCase() + list.slice(1)} ${weak.length === 1 ? 'is' : 'are'} only self-reported, so a match there doesn't confirm ${weak.length === 1 ? 'it' : 'them'}.`;
+  return `${lead} ${list.charAt(0).toUpperCase() + list.slice(1)} ${weak.length === 1 ? 'is' : 'are'} ${weak.every((r) => r.source!.trust === 'self-reported') ? 'only self-reported' : 'not verified (self-reported or updated by you)'}, so a match there doesn't confirm ${weak.length === 1 ? 'it' : 'them'}.`;
 }

@@ -27,6 +27,7 @@ Tests: `npx playwright install chromium` once, then `npm test`.
 | "At a glance" case summary | `src/lib/summary.ts` |
 | Per-requirement history and waiting time | `src/lib/timeline.ts` |
 | File checks for documents attached when logging a receipt | `src/lib/attachments.ts` |
+| Editable case facts, validation and edit history | `src/lib/facts.ts` |
 | Tabs, filtering, sorting | `src/lib/queue.ts` |
 | useReducer store, save/undo, failure switch | `src/state/store.tsx` |
 | Screens | `src/components/` |
@@ -55,6 +56,7 @@ Keyboard: `S` start working, `J`/`K` next/previous (rows in the queue, cases in 
 - Cases awaiting a decision can be sent a "Remind supervisor" (recorded only, nothing is sent), at most once a day. When the due date is within 3 days or past (placeholder threshold), it becomes the case's next step, and the queue flags the case on the Awaiting decision tab.
 - Every case in `cases.json` is treated as assigned to Dana; the data has no assigned-worker field. The queue and each case say so. `locked` means a colleague has the case open, not that they own it.
 - "Log as received" is available on requested and on missing (never requested) requirements, for documents the worker gets outside the workspace. It lets the worker attach the document from their computer (PDF, JPG or PNG, up to 10 MB each, 5 files; placeholder limits), by picker or drag and drop. Files stay in the browser for the session; nothing is uploaded. The review pop-out previews them, but the comparison still uses sample details because the prototype can't read files.
+- Case facts (name, household size, phone, language, income, street, city) can be corrected two ways: "Update record" on a mismatched comparison row (the document is the source), or "Edit details" on the household card (worker picks a source). A reason is always required, the old value is kept in history, and the change can be undone. A corrected value is never treated as verified: comparisons label it "Updated … by you", and the form warns before replacing a value a document had verified.
 - `Follow up` opens the request pop-out for the first outstanding requirement ("Send another request").
 - Undo restores the case as it was but keeps history, adding an "Undid: …" entry so the record stays complete.
 - Received dates are tracked per requirement once logged here (`rinfo`); the case-level `rdate` from the data is the fallback.
