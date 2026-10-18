@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { fmtLong, fmtShort, TODAY } from '../lib/date';
 import { STATUS_LABEL } from '../lib/labels';
 import { DEFAULT_VIEW, filterCases, isWorkable, PAGE_SIZE, statusOptions, TABS, type QueueView, type SortKey } from '../lib/queue';
-import { docsSummary, isOpen, lastActivity, needsAction, nextAction } from '../lib/status';
+import { docsSummary, isOpen, lastActivity, needsAction } from '../lib/status';
 import { REQ_KEYS, type Case, type CaseStatus } from '../lib/types';
 import { DueCell, SnoozeTag, StatusPill } from './bits';
 
@@ -19,7 +19,6 @@ const COLUMNS: { key: SortKey | null; label: string; cls: string }[] = [
   { key: 'id', label: 'Case', cls: 'col-case' },
   { key: 'status', label: 'Status', cls: 'col-status' },
   { key: null, label: 'Documents', cls: 'col-docs' },
-  { key: null, label: 'Next action', cls: 'col-next' },
   { key: 'last', label: 'Last activity', cls: 'col-last' },
 ];
 
@@ -199,7 +198,6 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
                 </thead>
                 <tbody>
                   {pageRows.map((c, i) => {
-                    const na = nextAction(c);
                     const docs = docsSummary(c);
                     const last = lastActivity(c);
                     return (
@@ -229,10 +227,6 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
                           </div>
                           <div>{docs.verified} of 5 verified</div>
                           {docs.parts.length > 0 && <div className="cell-sub">{docs.parts.join(', ')}</div>}
-                        </td>
-                        <td data-label="Next action">
-                          <div className="next-label">{na.label}</div>
-                          <div className="cell-sub">{na.reason}</div>
                         </td>
                         <td data-label="Last activity">
                           {last ? (

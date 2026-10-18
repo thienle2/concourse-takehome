@@ -173,7 +173,6 @@ table.queue { width: 100%; border-collapse: collapse; font-size: 14px; }
 .col-case { width: 100px; white-space: nowrap; }
 .col-status { width: 190px; }
 .col-docs { width: 160px; }
-.col-next { min-width: 220px; }
 .col-last { width: 190px; }
 .due-cell { display: flex; flex-direction: column; gap: 2px; }
 .urgency { font-size: 12px; font-weight: 600; display: inline-flex; gap: 4px; align-items: center; }
@@ -181,7 +180,6 @@ table.queue { width: 100%; border-collapse: collapse; font-size: 14px; }
 .urgency-soon { color: var(--amber); }
 .urgency-today { color: var(--red); }
 .cell-sub { font-size: 12px; color: var(--ink-3); }
-.next-label { font-weight: 500; }
 .lock-tag { display: inline-flex; gap: 4px; align-items: center; font-size: 12px; color: var(--gray); margin-top: 4px; }
 .docbar { display: flex; gap: 3px; margin-bottom: 4px; }
 .docbar span { width: 18px; height: 6px; border-radius: 3px; background: var(--gray-bg); }
