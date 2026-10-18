@@ -120,6 +120,18 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
                   <span>Food assistance recertification</span>
                 </div>
               </div>
+              {/* Every case opens the same placeholder PDF; the data has no application files. */}
+              <a
+                className="btn btn-sm"
+                href={`${import.meta.env.BASE_URL}sample-application.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="application-link"
+              >
+                View full application (PDF)
+                <span aria-hidden="true">↗</span>
+                <span className="sr-only">, opens in a new tab</span>
+              </a>
             </div>
             <section className="summary" aria-labelledby="summary-title" data-testid="case-summary">
               <h2 id="summary-title" className="summary-title">At a glance</h2>

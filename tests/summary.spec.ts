@@ -82,3 +82,18 @@ test('case page shows the summary and expands a requirement history', async ({ p
   await expect(page.getByTestId('history-inc')).toContainText('Pay statement logged as received (mail)');
   await expect(page.getByTestId('case-summary')).toContainText('Pay statement (arrived Oct 12)');
 });
+
+test('case page links to the full application PDF in a new tab', async ({ page, request }) => {
+  await page.goto('/#/case/RC-10198'); // also available on read-only (decided) cases
+  const link = page.getByRole('link', { name: /View full application \(PDF\)/ });
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  const href = await link.getAttribute('href');
+  const res = await request.get(href!);
+  expect(res.status()).toBe(200);
+  expect(res.headers()['content-type']).toContain('application/pdf');
+
+  // Headless Chromium has no PDF viewer (it downloads instead), so check that a new tab opens.
+  const [popup] = await Promise.all([page.waitForEvent('popup'), link.click()]);
+  expect(popup).toBeTruthy();
+});
