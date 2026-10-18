@@ -24,6 +24,8 @@ export interface HistoryEvent {
   text: string;
   by: string;
   kind?: 'note' | 'event' | 'undo';
+  /** The requirement this entry is about, when known. */
+  req?: ReqKey;
 }
 
 export type Mismatch = Record<string, string | number | boolean>;

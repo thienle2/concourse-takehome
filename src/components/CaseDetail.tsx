@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { fmtDate, fmtShort } from '../lib/date';
 import { RECEIVE_CHANNELS, REQ_DOC, REQ_LABEL } from '../lib/labels';
 import { isReadOnly, isSnoozed, nextAction, readOnlyReason, receivedDate } from '../lib/status';
+import { caseSummary } from '../lib/summary';
+import { requirementTimeline, stepDate, timelineCount, waitingPhrase } from '../lib/timeline';
 import { REQ_KEYS, type Case, type ReqKey } from '../lib/types';
 import { useStore } from '../state/store';
 import { Activity } from './Activity';
@@ -119,6 +121,12 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
                 </div>
               </div>
             </div>
+            <section className="summary" aria-labelledby="summary-title" data-testid="case-summary">
+              <h2 id="summary-title" className="summary-title">At a glance</h2>
+              {caseSummary(c).map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </section>
             {readOnlyReason(c) && (
               <div style={{ marginTop: 16 }}>
                 <Notice tone="lock"><strong>Read only.</strong> {readOnlyReason(c)}</Notice>
@@ -209,7 +217,9 @@ interface RowProps {
 }
 
 function RequirementRow({ c, k, readOnly, isOpen, receiving, setReceiving, btnRef, onOpen }: RowProps) {
+  const [showHistory, setShowHistory] = useState(false);
   const s = c.ver[k]!;
+  const waiting = waitingPhrase(c, k);
   const req = c.req[k];
   const vinfo = c.vinfo[k];
   const detail =
@@ -233,7 +243,19 @@ function RequirementRow({ c, k, readOnly, isOpen, receiving, setReceiving, btnRe
           <ReqPill s={s} />
           {isOpen && <span className="open-tag">● Open beside</span>}
         </div>
-        <div className="req-detail">{detail}</div>
+        <div className="req-detail">
+          {detail}
+          {waiting && <span className="req-waiting"> · {waiting}</span>}
+        </div>
+        <button
+          type="button"
+          className="history-toggle"
+          aria-expanded={showHistory}
+          aria-controls={`history-${k}`}
+          onClick={() => setShowHistory(!showHistory)}
+        >
+          <span aria-hidden="true">{showHistory ? '▾' : '▸'}</span> {showHistory ? 'Hide' : 'Show'} history{timelineCount(c, k) ? ` (${timelineCount(c, k)})` : ''}
+        </button>
       </div>
       <div className="req-actions">
         {s === 'v' && (
@@ -257,8 +279,27 @@ function RequirementRow({ c, k, readOnly, isOpen, receiving, setReceiving, btnRe
           <button type="button" className="btn btn-sm btn-primary" ref={btnRef} onClick={() => onOpen('request')}>Request document</button>
         )}
       </div>
+      {showHistory && <RequirementTimeline c={c} k={k} />}
       {receiving && <ReceiveForm c={c} k={k} onDone={() => setReceiving(false)} />}
     </li>
+  );
+}
+
+function RequirementTimeline({ c, k }: { c: Case; k: ReqKey }) {
+  const steps = requirementTimeline(c, k);
+  return (
+    <ol className="req-timeline" id={`history-${k}`} aria-label={`${REQ_LABEL[k]} history`} data-testid={`history-${k}`}>
+      {steps.map((st, i) => (
+        <li key={i} className={st.current ? 'is-current' : undefined}>
+          <span className="tl-date">{stepDate(st)}</span>
+          <span className="tl-dot" aria-hidden="true" />
+          <span className="tl-text">
+            {st.text}
+            {st.by && <span className="tl-by"> · {st.by === 'You' ? 'you' : st.by}</span>}
+          </span>
+        </li>
+      ))}
+    </ol>
   );
 }
 

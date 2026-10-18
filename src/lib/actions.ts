@@ -27,8 +27,8 @@ function statusSentence(c: Case): string {
   return isSnoozed(c) ? `Case status: ${label} (snoozed until ${fmtShort(c.fu!)}).` : `Case status: ${label}.`;
 }
 
-function withEvent(c: Case, text: string, kind: HistoryEvent['kind'] = 'event'): Case {
-  return { ...c, ev: [...c.ev, { date: TODAY, text, by: ME, kind }] };
+function withEvent(c: Case, text: string, kind: HistoryEvent['kind'] = 'event', req?: ReqKey): Case {
+  return { ...c, ev: [...c.ev, { date: TODAY, text, by: ME, kind, ...(req ? { req } : {}) }] };
 }
 
 const withNote = (text: string, note: string) => (note.trim() ? `${text}. Note: ${note.trim()}` : text);
@@ -50,25 +50,25 @@ export function applyAction(c: Case, a: CaseAction): ActionResult {
         ver: { ...c.ver, [a.key]: 'v' },
         vinfo: { ...c.vinfo, [a.key]: { d: TODAY, by: ME, note: a.note.trim() || undefined } },
       };
-      next = withEvent(next, withNote(`${REQ_LABEL[a.key]} verified (${REQ_DOC[a.key].toLowerCase()})`, a.note));
+      next = withEvent(next, withNote(`${REQ_LABEL[a.key]} verified (${REQ_DOC[a.key].toLowerCase()})`, a.note), 'event', a.key);
       what = `${REQ_LABEL[a.key]} marked verified. Requirement: ${REQ_STATUS_LABEL.v}.`;
       break;
     }
     case 'reject': {
       const cl = clearPastFollowUp({ ...c, ver: { ...c.ver, [a.key]: 'a' }, req: { ...c.req, [a.key]: { d: TODAY, via: a.via } } });
-      next = withEvent(cl.c, `${REQ_DOC[a.key]} rejected: ${a.reason}. New copy requested (${a.via.toLowerCase()})`);
+      next = withEvent(cl.c, `${REQ_DOC[a.key]} rejected: ${a.reason}. New copy requested (${a.via.toLowerCase()})`, 'event', a.key);
       what = `${REQ_DOC[a.key]} rejected and a new copy requested by ${a.via.toLowerCase()}. Nothing was actually sent. Requirement: ${REQ_STATUS_LABEL.a}.${cl.cleared ? ' Past follow-up date cleared.' : ''}`;
       break;
     }
     case 'request': {
       const again = c.ver[a.key] === 'a';
       const cl = clearPastFollowUp({ ...c, ver: { ...c.ver, [a.key]: 'a' }, req: { ...c.req, [a.key]: { d: TODAY, via: a.via } } });
-      next = withEvent(cl.c, withNote(`Document request recorded${again ? ' again' : ''}: ${REQ_LABEL[a.key].toLowerCase()} (${a.via.toLowerCase()})`, a.note));
+      next = withEvent(cl.c, withNote(`Document request recorded${again ? ' again' : ''}: ${REQ_LABEL[a.key].toLowerCase()} (${a.via.toLowerCase()})`, a.note), 'event', a.key);
       what = `${again ? 'Another request' : 'Request'} for ${REQ_LABEL[a.key].toLowerCase()} recorded (${a.via.toLowerCase()}). Nothing was actually sent. Requirement: ${REQ_STATUS_LABEL.a}.${cl.cleared ? ' Past follow-up date cleared.' : ''}`;
       break;
     }
     case 'receive': {
-      next = withEvent({ ...c, ver: { ...c.ver, [a.key]: 'r' }, rinfo: { ...c.rinfo, [a.key]: { d: TODAY, via: a.via } } }, `${REQ_DOC[a.key]} logged as received (${a.via.toLowerCase()})`);
+      next = withEvent({ ...c, ver: { ...c.ver, [a.key]: 'r' }, rinfo: { ...c.rinfo, [a.key]: { d: TODAY, via: a.via } } }, `${REQ_DOC[a.key]} logged as received (${a.via.toLowerCase()})`, 'event', a.key);
       what = `${REQ_DOC[a.key]} logged as received. Requirement: ${REQ_STATUS_LABEL.r}.`;
       break;
     }

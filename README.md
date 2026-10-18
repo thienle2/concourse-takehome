@@ -22,6 +22,8 @@ Tests: `npx playwright install chromium` once, then `npm test`.
 | What each save does + the confirmation text | `src/lib/actions.ts` |
 | Fake documents and the comparison table | `src/lib/documents.ts` |
 | Address parsing and placeholder state/ZIP | `src/lib/address.ts` |
+| "At a glance" case summary | `src/lib/summary.ts` |
+| Per-requirement history and waiting time | `src/lib/timeline.ts` |
 | Tabs, tiles, filtering, sorting | `src/lib/queue.ts` |
 | useReducer store, save/undo, failure switch | `src/state/store.tsx` |
 | Screens | `src/components/` |
@@ -44,6 +46,8 @@ Keyboard: `S` start working, `J`/`K` next/previous (rows in the queue, cases in 
 - Follow-up dates must be after today. While the due date is ahead they are capped at it; once a case is overdue, any later date is allowed so the worker can still schedule a check-back while waiting on documents.
 - Addresses are split into street, city, state and ZIP at load (`src/lib/address.ts`). The data has only street and city, so the state (`AD`, fictional) and ZIPs (unused `000xx` range, one per street) are placeholders, labelled in the UI.
 - Document comparisons show where each value came from. A case fact counts as **verified** only when a different, already-verified requirement proves it (Identity proves the name, Residency the address, Household members the size, Income the income). Otherwise it's **self-reported**, and the result says "Matches self-reported value" so a weak match doesn't read as proof. Treating unverified facts as coming from the application is a placeholder assumption.
+- Each case opens with an "At a glance" summary built only from case data: timing and stage, what's outstanding and what it's waiting on, and things to know (returned mail, no phone, language, who has it open). It never states an eligibility outcome.
+- Each requirement shows how long it has been waiting and can expand into its own history. Actions taken here are tagged with their requirement; events from `cases.json` are matched by the requirement or document named in their text.
 - `Follow up` opens the request pop-out for the first outstanding requirement ("Send another request").
 - Undo restores the case as it was but keeps history, adding an "Undid: …" entry so the record stays complete.
 - Received dates are tracked per requirement once logged here (`rinfo`); the case-level `rdate` from the data is the fallback.
