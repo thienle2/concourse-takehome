@@ -5,6 +5,7 @@ import { isReadOnly, isSnoozed, nextAction, readOnlyReason, receivedDate } from 
 import { caseSummary } from '../lib/summary';
 import { requirementTimeline, stepDate, timelineCount, waitingPhrase } from '../lib/timeline';
 import { REQ_KEYS, type Case, type ReqKey } from '../lib/types';
+import { ACCEPT_ATTR, formatBytes, MAX_FILE_BYTES, MAX_FILES, validateFiles, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
 import { Activity } from './Activity';
 import { dueUrgency, Notice, NotProvided, NotSaved, ReqPill, StatusPill } from './bits';
@@ -263,6 +264,9 @@ function RequirementRow({ c, k, readOnly, isOpen, receiving, setReceiving, btnRe
         <div className="req-detail">
           {detail}
           {waiting && <span className="req-waiting"> · {waiting}</span>}
+          {!!c.rinfo[k]?.files?.length && (
+            <span className="req-waiting"> · {c.rinfo[k]!.files!.length} file{c.rinfo[k]!.files!.length === 1 ? '' : 's'} attached</span>
+          )}
         </div>
         <button
           type="button"
@@ -323,24 +327,96 @@ function RequirementTimeline({ c, k }: { c: Case; k: ReqKey }) {
 function ReceiveForm({ c, k, onDone }: { c: Case; k: ReqKey; onDone: () => void }) {
   const { save } = useStore();
   const [via, setVia] = useState<string>(RECEIVE_CHANNELS[0]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState('');
+  const [dragging, setDragging] = useState(false);
   const [failed, setFailed] = useState(false);
+  const inputId = `recv-file-${k}`;
+
+  const addFiles = (list: FileList | null) => {
+    if (!list?.length) return;
+    // Adding the same file twice (same name and size) is ignored.
+    const next = [...files, ...Array.from(list).filter((f) => !files.some((g) => g.name === f.name && g.size === f.size))];
+    setFiles(next);
+    setFileError(validateFiles(next));
+  };
+  const removeFile = (i: number) => {
+    const next = files.filter((_, j) => j !== i);
+    setFiles(next);
+    setFileError(validateFiles(next));
+    // The Remove button goes away with its file; keep keyboard focus in the form.
+    document.getElementById(inputId)?.focus();
+  };
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setFailed(false);
-    const res = save(c.id, { type: 'receive', key: k, via });
+    const err = validateFiles(files);
+    setFileError(err);
+    if (err) {
+      document.getElementById(inputId)?.focus();
+      return;
+    }
+    const attachments: Attachment[] = files.map((f) => ({ name: f.name, type: f.type, size: f.size, url: URL.createObjectURL(f) }));
+    const res = save(c.id, { type: 'receive', key: k, via, files: attachments });
     if (res.ok) onDone();
-    else setFailed(true);
+    else {
+      attachments.forEach((a) => URL.revokeObjectURL(a.url));
+      setFailed(true);
+    }
   };
+
   return (
-    <form className="req-inline" onSubmit={submit} noValidate>
+    <form className="req-inline" onSubmit={submit} noValidate data-testid={`receive-form-${k}`}>
       <NotSaved show={failed} />
-      <div className="row" style={{ alignItems: 'flex-end', marginTop: failed ? 12 : 0 }}>
-        <div className="field" style={{ flex: '1 1 200px' }}>
-          <label className="label" htmlFor={`recv-${k}`}>How did the {REQ_DOC[k].toLowerCase()} arrive?</label>
-          <select id={`recv-${k}`} className="select" value={via} onChange={(e) => setVia(e.target.value)}>
-            {RECEIVE_CHANNELS.map((ch) => <option key={ch}>{ch}</option>)}
-          </select>
+      <div className="field" style={{ marginTop: failed ? 12 : 0 }}>
+        <label className="label" htmlFor={`recv-${k}`}>How did the {REQ_DOC[k].toLowerCase()} arrive?</label>
+        <select id={`recv-${k}`} className="select" value={via} onChange={(e) => setVia(e.target.value)} style={{ maxWidth: 320 }}>
+          {RECEIVE_CHANNELS.map((ch) => <option key={ch}>{ch}</option>)}
+        </select>
+      </div>
+
+      <div className="field">
+        <span className="label" id={`${inputId}-label`}>Attach the document (optional)</span>
+        <span className="hint" id={`${inputId}-hint`}>
+          PDF, JPG or PNG, up to {formatBytes(MAX_FILE_BYTES)} each, {MAX_FILES} files at most. Files stay in this browser; nothing is uploaded from the prototype.
+        </span>
+        {fileError && <span className="field-error" id={`${inputId}-err`}>{fileError}</span>}
+        <div
+          className={`dropzone${dragging ? ' dragging' : ''}${fileError ? ' invalid' : ''}`}
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(e) => { e.preventDefault(); setDragging(false); addFiles(e.dataTransfer.files); }}
+        >
+          <input
+            id={inputId}
+            type="file"
+            multiple
+            accept={ACCEPT_ATTR}
+            className="sr-only"
+            aria-labelledby={`${inputId}-label`}
+            aria-describedby={`${inputId}-hint${fileError ? ` ${inputId}-err` : ''}`}
+            aria-invalid={!!fileError || undefined}
+            onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }}
+          />
+          <label htmlFor={inputId} className="btn btn-sm">Choose files</label>
+          <span className="small muted">or drag them here</span>
         </div>
+        {files.length > 0 && (
+          <ul className="file-list" aria-label="Files to attach">
+            {files.map((f, i) => (
+              <li key={`${f.name}-${f.size}`}>
+                <span className="file-icon" aria-hidden="true">{f.type === 'application/pdf' ? 'PDF' : f.type.startsWith('image/') ? 'IMG' : '?'}</span>
+                <span className="file-name">{f.name}</span>
+                <span className="small muted">{formatBytes(f.size)}</span>
+                <button type="button" className="btn btn-ghost btn-sm" onClick={() => removeFile(i)} aria-label={`Remove ${f.name}`}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="row" style={{ marginTop: 16 }}>
         <button type="submit" className="btn btn-primary btn-sm">Log as received</button>
         <button type="button" className="btn btn-ghost btn-sm" onClick={onDone}>Cancel</button>
       </div>

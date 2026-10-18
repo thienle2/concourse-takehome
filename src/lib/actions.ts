@@ -1,6 +1,7 @@
 import { fmtDate, fmtShort, TODAY } from './date';
 import { REQ_DOC, REQ_LABEL, REQ_STATUS_LABEL, STATUS_LABEL } from './labels';
 import { caseStatus, isSnoozed } from './status';
+import type { Attachment } from './attachments';
 import type { Case, HistoryEvent, ReqKey } from './types';
 
 export const ME = 'You';
@@ -10,7 +11,7 @@ export type CaseAction =
   | { type: 'verify'; key: ReqKey; note: string }
   | { type: 'reject'; key: ReqKey; reason: string; via: string }
   | { type: 'request'; key: ReqKey; via: string; note: string }
-  | { type: 'receive'; key: ReqKey; via: string }
+  | { type: 'receive'; key: ReqKey; via: string; files?: Attachment[] }
   | { type: 'setFollowUp'; date: string; note: string }
   | { type: 'markReady'; note: string }
   | { type: 'unready'; reason: string }
@@ -69,8 +70,15 @@ export function applyAction(c: Case, a: CaseAction): ActionResult {
       break;
     }
     case 'receive': {
-      next = withEvent({ ...c, ver: { ...c.ver, [a.key]: 'r' }, rinfo: { ...c.rinfo, [a.key]: { d: TODAY, via: a.via } } }, `${REQ_DOC[a.key]} logged as received (${a.via.toLowerCase()})`, 'event', a.key);
-      what = `${REQ_DOC[a.key]} logged as received. Requirement: ${REQ_STATUS_LABEL.r}.`;
+      const attached = a.files ?? [];
+      const files = attached.length ? `. ${attached.length} file${attached.length === 1 ? '' : 's'} attached: ${attached.map((f) => f.name).join(', ')}` : '';
+      next = withEvent(
+        { ...c, ver: { ...c.ver, [a.key]: 'r' }, rinfo: { ...c.rinfo, [a.key]: { d: TODAY, via: a.via, ...(attached.length ? { files: attached } : {}) } } },
+        `${REQ_DOC[a.key]} logged as received (${a.via.toLowerCase()})${files}`,
+        'event',
+        a.key,
+      );
+      what = `${REQ_DOC[a.key]} logged as received${attached.length ? ` with ${attached.length} file${attached.length === 1 ? '' : 's'} attached` : ''}. Requirement: ${REQ_STATUS_LABEL.r}.`;
       break;
     }
     case 'setFollowUp': {

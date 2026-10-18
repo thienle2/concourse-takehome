@@ -5,6 +5,7 @@ import { buildDocument, hasMismatch, trustSummary, type CompareRow, type Trust }
 import { REJECT_REASONS, REQ_ASK, REQ_DOC, REQ_LABEL, REQUEST_CHANNELS } from '../lib/labels';
 import { isReadOnly, readOnlyReason, receivedDate } from '../lib/status';
 import type { Case, ReqKey } from '../lib/types';
+import { formatBytes, isImage, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
 import { ErrorSummary, Notice, NotSaved, ReqPill, type FieldError } from './bits';
 import { NoteField, noteLimitError } from './NoteField';
@@ -83,6 +84,7 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
   return (
     <>
       {mode === 'view' && status === 'r' && isReadOnly(c) && <Notice tone="lock">{readOnlyReason(c)} This document hasn't been reviewed.</Notice>}
+      {!!c.rinfo[reqKey]?.files?.length && <AttachedFiles files={c.rinfo[reqKey]!.files!} />}
       <figure className="paper" style={{ margin: 0 }} aria-label={`${doc.title} (sample document)`}>
         <span className="paper-watermark">Sample · fictional</span>
         <div className="paper-issuer">{doc.issuer}</div>
@@ -360,5 +362,39 @@ function RequestForm({ c, reqKey, onDone }: { c: Case; reqKey: ReqKey; onDone: (
         </div>
       </form>
     </>
+  );
+}
+
+/** Files the worker attached when logging the document. The first one is previewed. */
+function AttachedFiles({ files }: { files: Attachment[] }) {
+  const [shown, setShown] = useState(0);
+  const f = files[shown];
+  return (
+    <section className="attached" aria-labelledby="attached-title" data-testid="attached-files">
+      <h3 id="attached-title">Attached by you</h3>
+      <ul className="file-list">
+        {files.map((a, i) => (
+          <li key={a.url}>
+            <span className="file-icon" aria-hidden="true">{isImage(a) ? 'IMG' : 'PDF'}</span>
+            <span className="file-name">{a.name}</span>
+            <span className="small muted">{formatBytes(a.size)}</span>
+            {files.length > 1 && (
+              <button type="button" className="btn btn-ghost btn-sm" aria-pressed={i === shown} onClick={() => setShown(i)}>
+                {i === shown ? 'Showing' : 'Show'}
+              </button>
+            )}
+            <a className="btn btn-ghost btn-sm" href={a.url} target="_blank" rel="noopener noreferrer">
+              Open <span aria-hidden="true">↗</span><span className="sr-only">, opens in a new tab</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className="attached-preview">
+        {isImage(f) ? <img src={f.url} alt={`Preview of ${f.name}`} /> : <iframe src={f.url} title={`Preview of ${f.name}`} />}
+      </div>
+      <p className="hint" style={{ marginTop: 8 }}>
+        The prototype can't read uploaded files, so the details compared below come from a sample document.
+      </p>
+    </section>
   );
 }

@@ -1,4 +1,5 @@
 import { parseAddress, type Address } from './address';
+import type { Attachment } from './attachments';
 
 export type ReqKey = 'inc' | 'id' | 'res' | 'hh' | 'shl';
 export const REQ_KEYS: ReqKey[] = ['inc', 'id', 'res', 'hh', 'shl'];
@@ -11,6 +12,13 @@ export type CaseStatus = 'decided' | 'ready' | 'verified' | 'review' | 'missing'
 export interface RequestRecord {
   d: string;
   via: string;
+}
+
+export interface ReceiptRecord {
+  d: string;
+  via: string;
+  /** Files the worker attached when logging the receipt. */
+  files?: Attachment[];
 }
 
 export interface VerifyRecord {
@@ -53,7 +61,7 @@ export interface Case {
   /** When documents arrived (case level, from the data). */
   rdate: string | null;
   /** Per-requirement receipts logged in this workspace; these win over rdate. */
-  rinfo: Partial<Record<ReqKey, RequestRecord>>;
+  rinfo: Partial<Record<ReqKey, ReceiptRecord>>;
   dx: Partial<Record<ReqKey, Mismatch>>;
   ev: HistoryEvent[];
 }

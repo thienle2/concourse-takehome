@@ -42,8 +42,9 @@ export function waitingDays(c: Case, k: ReqKey): number | null {
 
 export function waitingPhrase(c: Case, k: ReqKey): string | null {
   const d = waitingDays(c, k);
-  if (d == null) return null;
-  return d === 0 ? 'today' : `${plural(d, 'day')} ago`;
+  // On day 0 the row already shows today's date, so "today" would only repeat it.
+  if (d == null || d === 0) return null;
+  return `${plural(d, 'day')} ago`;
 }
 
 /** Oldest first, ending with a line that says where the requirement stands today. */
