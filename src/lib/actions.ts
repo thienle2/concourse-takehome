@@ -14,6 +14,7 @@ export type CaseAction =
   | { type: 'setFollowUp'; date: string; note: string }
   | { type: 'markReady'; note: string }
   | { type: 'unready'; reason: string }
+  | { type: 'remindSupervisor'; note: string }
   | { type: 'note'; text: string };
 
 export interface ActionResult {
@@ -86,6 +87,11 @@ export function applyAction(c: Case, a: CaseAction): ActionResult {
     case 'unready': {
       next = withEvent({ ...c, ready: false }, withNote('Ready for decision taken back', a.reason));
       what = 'Ready for decision taken back.';
+      break;
+    }
+    case 'remindSupervisor': {
+      next = withEvent({ ...c, reminders: [...c.reminders, TODAY] }, withNote('Supervisor reminded about pending decision', a.note));
+      what = 'Reminder to the supervisor recorded. Nothing was actually sent.';
       break;
     }
     case 'note': {

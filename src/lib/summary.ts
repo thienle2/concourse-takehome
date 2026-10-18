@@ -2,7 +2,7 @@
 // true now; it never recommends an eligibility outcome.
 import { daysBetween, fmtShort, TODAY } from './date';
 import { REQ_DOC, REQ_LABEL } from './labels';
-import { caseStatus, isSnoozed, lastActivity, receivedDate } from './status';
+import { caseStatus, decisionAtRisk, dueProximity, isSnoozed, lastActivity, lastReminder, receivedDate } from './status';
 import { waitingDays } from './timeline';
 import { REQ_KEYS, type Case, type ReqKey, type ReqStatus } from './types';
 
@@ -75,6 +75,11 @@ function outstanding(c: Case): string | null {
     parts.push(text);
   }
 
+  if (caseStatus(c) === 'ready') {
+    const sent = lastReminder(c);
+    const reminder = sent ? `Supervisor last reminded ${fmtShort(sent)}.` : 'No reminder sent to the supervisor yet.';
+    return decisionAtRisk(c) ? `The decision is still pending ${dueProximity(c)}. ${reminder}` : sent ? reminder : null;
+  }
   if (!parts.length) {
     return caseStatus(c) === 'verified' ? "Everything is verified. It hasn't been marked ready for decision yet." : null;
   }

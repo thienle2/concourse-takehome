@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { fmtLong, fmtShort, TODAY } from '../lib/date';
 import { STATUS_LABEL } from '../lib/labels';
 import { DEFAULT_VIEW, filterCases, isWorkable, PAGE_SIZE, statusOptions, TABS, type QueueView, type SortKey } from '../lib/queue';
-import { docsSummary, isOpen, lastActivity, needsAction } from '../lib/status';
+import { decisionAtRisk, docsSummary, isOpen, lastActivity, lastReminder, needsAction } from '../lib/status';
 import type { Case, CaseStatus } from '../lib/types';
 import { DueCell, SnoozeTag, StatusPill } from './bits';
 
@@ -106,6 +106,11 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
             >
               {t.label}
               <span className="tab-count">{cases.filter(t.test).length}</span>
+              {t.key === 'awaiting' && cases.some(decisionAtRisk) && (
+                <span className="tab-alert">
+                  <span aria-hidden="true">▲</span> {cases.filter(decisionAtRisk).length} near due date
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -220,6 +225,12 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
                         <td data-label="Status">
                           <StatusPill c={c} />
                           <div><SnoozeTag c={c} /></div>
+                          {decisionAtRisk(c) && (
+                            <div className="decision-risk">
+                              <span aria-hidden="true">▲</span> Decision pending near due date
+                              <span className="cell-sub"> · {lastReminder(c) ? `reminded ${fmtShort(lastReminder(c)!)}` : 'not reminded'}</span>
+                            </div>
+                          )}
                         </td>
                         <td data-label="Documents">
                           <div>{docs.verified} of 5 verified</div>

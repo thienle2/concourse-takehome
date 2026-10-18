@@ -77,6 +77,10 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
         setUpdate('followup');
         document.getElementById('update-case')?.scrollIntoView({ block: 'center' });
         break;
+      case 'remind-supervisor':
+        setUpdate('remind');
+        document.getElementById('update-case')?.scrollIntoView({ block: 'center' });
+        break;
       case 'mark-ready':
         setUpdate('ready');
         document.getElementById('update-case')?.scrollIntoView({ block: 'center' });

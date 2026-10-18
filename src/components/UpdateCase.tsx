@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { addDays, fmtDate, TODAY } from '../lib/date';
-import { canMarkReady, canSetFollowUp, followUpMax, isSnoozed, readOnlyReason, validateFollowUpDate } from '../lib/status';
+import { canMarkReady, canRemindSupervisor, canSetFollowUp, decisionAtRisk, dueProximity, followUpMax, isSnoozed, lastReminder, readOnlyReason, validateFollowUpDate } from '../lib/status';
 import type { Case } from '../lib/types';
 import { useStore } from '../state/store';
 import { ErrorSummary, NotSaved, type FieldError } from './bits';
 import { NoteField, noteLimitError } from './NoteField';
 
-export type UpdateOpen = 'followup' | 'ready' | null;
+export type UpdateOpen = 'followup' | 'ready' | 'remind' | null;
 
 interface Props {
   c: Case;
@@ -28,6 +28,7 @@ export function UpdateCase({ c, open, setOpen }: Props) {
         <div className="update-grid">
           <FollowUpBox c={c} open={open === 'followup'} setOpen={(o) => setOpen(o ? 'followup' : null)} />
           <ReadyBox c={c} open={open === 'ready'} setOpen={(o) => setOpen(o ? 'ready' : null)} />
+          {c.ready && <RemindBox c={c} open={open === 'remind'} setOpen={(o) => setOpen(o ? 'remind' : null)} />}
         </div>
       )}
     </section>
@@ -176,6 +177,73 @@ function ReadyBox({ c, open, setOpen }: { c: Case; open: boolean; setOpen: (o: b
           />
           <div className="row" style={{ marginTop: 12 }}>
             <button type="submit" className="btn btn-primary">{c.ready ? 'Take back ready for decision' : 'Confirm ready for decision'}</button>
+            <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setErrors([]); setFailed(false); }}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
+
+function RemindBox({ c, open, setOpen }: { c: Case; open: boolean; setOpen: (o: boolean) => void }) {
+  const { save } = useStore();
+  const guard = canRemindSupervisor(c);
+  const [note, setNote] = useState('');
+  const [errors, setErrors] = useState<FieldError[]>([]);
+  const [failed, setFailed] = useState(false);
+  const last = lastReminder(c);
+
+  useEffect(() => {
+    if (open) document.getElementById('remind-note')?.focus();
+  }, [open]);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFailed(false);
+    const lim = noteLimitError(note);
+    const errs = lim ? [{ id: 'remind-note', message: lim }] : [];
+    setErrors(errs);
+    if (errs.length) return;
+    const res = save(c.id, { type: 'remindSupervisor', note });
+    if (res.ok) {
+      setOpen(false);
+      setNote('');
+    } else setFailed(true);
+  };
+
+  return (
+    <div className="update-box" data-testid="remind-box">
+      <h3>Supervisor reminder</h3>
+      <p className="small">
+        {decisionAtRisk(c) ? <strong>The decision is still pending {dueProximity(c)} ({fmtDate(c.due)}). </strong> : null}
+        Last reminder: <strong>{last ? `${fmtDate(last)}${c.reminders.length > 1 ? ` (${c.reminders.length} sent)` : ''}` : 'None sent'}</strong>
+      </p>
+      {!guard.ok ? (
+        <>
+          <button type="button" className="btn" aria-disabled="true" aria-describedby="remind-blocked" onClick={(e) => e.preventDefault()}>
+            Remind supervisor
+          </button>
+          <p className="blocked" id="remind-blocked" data-testid="remind-blocked">{guard.reason}</p>
+        </>
+      ) : !open ? (
+        <button type="button" className="btn" onClick={() => setOpen(true)}>Remind supervisor</button>
+      ) : (
+        <form onSubmit={submit} noValidate>
+          <ErrorSummary errors={errors} />
+          <NotSaved show={failed} />
+          <NoteField
+            id="remind-note"
+            label="Message for the supervisor (optional)"
+            hint="Records a reminder on the case. Nothing is actually sent from this prototype."
+            value={note}
+            onChange={setNote}
+            error={errors[0]?.message}
+            rows={2}
+          />
+          <div className="row" style={{ marginTop: 12 }}>
+            <button type="submit" className="btn btn-primary">Send reminder</button>
             <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setErrors([]); setFailed(false); }}>
               Cancel
             </button>

@@ -88,7 +88,27 @@ export function canMarkReady(c: Case): Guard {
   return { ok: true, reason: '' };
 }
 
-export type NextKind = 'no-requirements' | 'review' | 'request' | 'set-followup' | 'follow-up' | 'snoozed' | 'mark-ready' | 'awaiting-decision' | 'decided';
+// PLACEHOLDER: how close to the due date an undecided case counts as at risk. Not a program rule.
+export const DECISION_RISK_DAYS = 3;
+
+export const lastReminder = (c: Case): string | null => (c.reminders.length ? c.reminders[c.reminders.length - 1] : null);
+
+/** Ready for decision, still undecided, and the due date is close or past. */
+export const decisionAtRisk = (c: Case) => caseStatus(c) === 'ready' && c.due <= addDays(TODAY, DECISION_RISK_DAYS);
+
+/** "past the due date" or "close to the due date", for at-risk wording. */
+export const dueProximity = (c: Case) => (c.due < TODAY ? 'past the due date' : 'close to the due date');
+
+/** A reminder is for cases waiting on a supervisor, at most once a day. */
+export function canRemindSupervisor(c: Case): Guard {
+  const ro = readOnlyReason(c);
+  if (ro) return { ok: false, reason: ro };
+  if (caseStatus(c) !== 'ready') return { ok: false, reason: 'Only cases marked ready for decision are waiting on a supervisor.' };
+  if (lastReminder(c) === TODAY) return { ok: false, reason: 'You already reminded the supervisor today. You can send another tomorrow.' };
+  return { ok: true, reason: '' };
+}
+
+export type NextKind = 'no-requirements' | 'remind-supervisor' | 'review' | 'request' | 'set-followup' | 'follow-up' | 'snoozed' | 'mark-ready' | 'awaiting-decision' | 'decided';
 
 export interface NextAction {
   kind: NextKind;
@@ -110,7 +130,17 @@ function requestedPhrase(c: Case, k: ReqKey): string {
 export function nextAction(c: Case): NextAction {
   if (c.decided) return { kind: 'decided', label: 'No action', reason: c.decided };
   if (c.ready && caseStatus(c) === 'ready') {
-    return { kind: 'awaiting-decision', label: 'Awaiting decision', reason: 'Marked ready. A supervisor records the decision.' };
+    const sent = lastReminder(c);
+    if (decisionAtRisk(c) && canRemindSupervisor(c).ok) {
+      const when = c.due < TODAY ? `overdue since ${fmtShort(c.due)}` : c.due === TODAY ? 'due today' : `due ${fmtShort(c.due)}`;
+      return {
+        kind: 'remind-supervisor',
+        label: 'Remind supervisor',
+        reason: `Still waiting on a supervisor decision and the case is ${when}.${sent ? ` Last reminder ${fmtShort(sent)}.` : ' No reminder sent yet.'}`,
+      };
+    }
+    const reminded = sent === TODAY ? ' You reminded the supervisor today.' : '';
+    return { kind: 'awaiting-decision', label: 'Awaiting decision', reason: `Marked ready. A supervisor records the decision.${reminded}` };
   }
   if (!REQ_KEYS.some((k) => c.ver[k])) {
     return { kind: 'no-requirements', label: 'No requirements yet', reason: 'Nothing to review or request until requirements are set up for this case.' };

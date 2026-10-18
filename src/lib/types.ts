@@ -45,6 +45,8 @@ export interface Case {
   vinfo: Partial<Record<ReqKey, VerifyRecord>>;
   fu: string | null;
   ready: boolean;
+  /** Dates the worker reminded the supervisor about this case, oldest first. */
+  reminders: string[];
   returned: boolean;
   locked: string | null;
   decided: string | null;
@@ -75,6 +77,7 @@ export function normalizeCase(raw: any): Case {
     vinfo: raw.vinfo ?? {},
     fu: raw.fu ?? null,
     ready: raw.ready === true,
+    reminders: raw.reminders ?? [],
     returned: raw.returned === true,
     locked: raw.locked ?? null,
     decided: raw.decided ?? null,

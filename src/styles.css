@@ -148,6 +148,9 @@ fieldset legend { padding: 0; }
 .tab[aria-pressed='true'] { color: var(--ink); border-bottom-color: var(--ink); }
 .tab-count { font-size: 12px; background: var(--gray-bg); color: var(--gray); border-radius: 999px; padding: 0 8px; }
 .tab[aria-pressed='true'] .tab-count { background: var(--ink); color: #fff; }
+.tab-alert { font-size: 12px; font-weight: 600; color: var(--red); }
+.decision-risk { font-size: 12px; font-weight: 600; color: var(--red); margin-top: 4px; }
+.decision-risk .cell-sub { font-weight: 400; }
 
 .toolbar { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 12px; }
 .toolbar .field { margin: 0; }
