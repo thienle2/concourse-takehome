@@ -4,6 +4,8 @@ A clickable prototype of a caseworker's workspace for food-assistance recertific
 
 Today is fixed at **2026-10-12** (`src/lib/date.ts`). The real clock is never read.
 
+**Live:** https://concoursetakehome.vercel.app
+
 ## Run
 
 ```bash
