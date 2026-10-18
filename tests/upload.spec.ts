@@ -65,3 +65,18 @@ test('a failed save keeps the chosen files', async ({ page }) => {
   await form.getByRole('button', { name: 'Log as received' }).click();
   await expect(page.getByTestId('req-inc')).toContainText('1 file attached');
 });
+
+test('a document that was never requested can be logged with a file', async ({ page }) => {
+  await page.goto('/#/case/RC-10231'); // shelter costs: missing, not requested
+  const row = page.getByTestId('req-shl');
+  await expect(row).toContainText('Missing, not requested');
+  await row.getByRole('button', { name: 'Log as received' }).click();
+  const form = page.getByTestId('receive-form-shl');
+  await form.locator('input[type=file]').setInputFiles({ ...pdf, name: 'lease-2026.pdf' });
+  await form.getByRole('button', { name: 'Log as received' }).click();
+
+  await expect(page.getByTestId('toast')).toContainText('Lease logged as received with 1 file attached. Requirement: Received, needs review.');
+  await expect(row).toContainText('Received, needs review');
+  await expect(row).toContainText('1 file attached');
+  await expect(row.getByRole('button', { name: 'Review document' })).toBeVisible();
+});

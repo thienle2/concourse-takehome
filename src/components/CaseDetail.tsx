@@ -297,7 +297,13 @@ function RequirementRow({ c, k, readOnly, isOpen, receiving, setReceiving, btnRe
           </>
         )}
         {s === 'm' && !readOnly && (
-          <button type="button" className="btn btn-sm btn-primary" ref={btnRef} onClick={() => onOpen('request')}>Request document</button>
+          <>
+            {/* For documents the worker got without a request, e.g. handed in at the office. */}
+            <button type="button" className="btn btn-sm" onClick={() => setReceiving(!receiving)} aria-expanded={receiving}>
+              Log as received
+            </button>
+            <button type="button" className="btn btn-sm btn-primary" ref={btnRef} onClick={() => onOpen('request')}>Request document</button>
+          </>
         )}
       </div>
       {showHistory && <RequirementTimeline c={c} k={k} />}
