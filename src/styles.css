@@ -309,6 +309,19 @@ table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
 .source-rule { color: var(--ink-3); }
 .source-updated { color: var(--violet); }
 .update-link { display: block; font-size: 13px; margin-top: 6px; min-height: 32px; }
+.diffs { border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 14px 16px; }
+.diffs-title { font-size: 15px; display: flex; gap: 8px; align-items: center; }
+.diffs-title.has-diffs { color: var(--red); }
+.diffs-title.no-diffs { color: var(--green); }
+.diff-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.diff-list > li { border-top: 1px solid var(--line); padding: 10px 0; }
+.diff-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.diff-row strong { font-weight: 600; overflow-wrap: anywhere; }
+.diff-label { font-weight: 600; font-size: 14px; }
+.diff-list .fact-form { margin-top: 10px; }
+.diff-actions { display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; font-size: 13px; }
+.diff-actions .link-btn { font-size: 13px; }
+.diffs > .fact-form { margin-top: 10px; }
 .compare tr.update-row td { background: #f8f9fc; padding: 12px; }
 .fact-form { background: #f8f9fc; border-radius: var(--radius-sm); padding: 16px; }
 .compare .fact-form { padding: 4px 0 0; }

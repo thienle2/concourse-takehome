@@ -18,6 +18,12 @@ import { useStore } from '../state/store';
 import { ErrorSummary, Notice, NotSaved, type FieldError } from './bits';
 import { NoteField, noteLimitError } from './NoteField';
 
+/** "Pay statement received Oct 10": the source recorded when a document drives a change. */
+export function documentSource(c: Case, reqKey: ReqKey): string {
+  const rd = receivedDate(c, reqKey);
+  return `${REQ_DOC[reqKey]}${rd ? ` received ${fmtShort(rd)}` : ''}`;
+}
+
 /** Update one case fact to what a document shows. Opened from a mismatched comparison row. */
 export function RowUpdateForm({ c, reqKey, field, value, onDone }: { c: Case; reqKey: ReqKey; field: FactField; value: string; onDone: () => void }) {
   const { save } = useStore();
@@ -25,8 +31,7 @@ export function RowUpdateForm({ c, reqKey, field, value, onDone }: { c: Case; re
   const [errors, setErrors] = useState<FieldError[]>([]);
   const [failed, setFailed] = useState(false);
   const id = `upd-${field}`;
-  const rd = receivedDate(c, reqKey);
-  const source = `${REQ_DOC[reqKey]}${rd ? ` received ${fmtShort(rd)}` : ''}`;
+  const source = documentSource(c, reqKey);
   const checked = validateFact(field, value);
   const warning = verifiedWarning(c, field);
 
@@ -60,7 +65,7 @@ export function RowUpdateForm({ c, reqKey, field, value, onDone }: { c: Case; re
       <NoteField
         id={`${id}-reason`}
         label="Why should the record change? (required)"
-        hint="For example: household confirmed the new spelling by phone."
+        hint="For example: household confirmed the change by phone."
         value={reason}
         onChange={setReason}
         error={errors.find((x) => x.id === `${id}-reason`)?.message}
@@ -75,12 +80,13 @@ export function RowUpdateForm({ c, reqKey, field, value, onDone }: { c: Case; re
 }
 
 /** Correct several case facts at once, from information that came in outside a document review. */
-export function CaseDetailsForm({ c, onDone }: { c: Case; onDone: () => void }) {
+export function CaseDetailsForm({ c, onDone, defaultSource }: { c: Case; onDone: () => void; defaultSource?: string }) {
   const { save } = useStore();
   const [values, setValues] = useState<Record<FactField, string>>(
     () => Object.fromEntries(FACT_FIELDS.map((f) => [f, factValue(c, f) ?? ''])) as Record<FactField, string>,
   );
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState(defaultSource ?? '');
+  const sources = defaultSource ? [defaultSource, ...EDIT_SOURCES] : [...EDIT_SOURCES];
   const [reason, setReason] = useState('');
   const [errors, setErrors] = useState<FieldError[]>([]);
   const [failed, setFailed] = useState(false);
@@ -149,7 +155,7 @@ export function CaseDetailsForm({ c, onDone }: { c: Case; onDone: () => void }) 
         {err('edit-source') && <span className="field-error">{err('edit-source')}</span>}
         <select id="edit-source" className={`select${err('edit-source') ? ' invalid' : ''}`} value={source} onChange={(e) => setSource(e.target.value)} style={{ maxWidth: 320 }}>
           <option value="">Choose a source</option>
-          {EDIT_SOURCES.map((s) => <option key={s}>{s}</option>)}
+          {sources.map((s) => <option key={s}>{s}</option>)}
         </select>
       </div>
       <NoteField id="edit-reason" label="Why is it changing? (required)" value={reason} onChange={setReason} error={err('edit-reason')} rows={2} />

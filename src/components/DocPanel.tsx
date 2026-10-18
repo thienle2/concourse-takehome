@@ -8,7 +8,7 @@ import type { Case, ReqKey } from '../lib/types';
 import { formatBytes, isImage, type Attachment } from '../lib/attachments';
 import { useStore } from '../state/store';
 import { ErrorSummary, Notice, NotSaved, ReqPill, type FieldError } from './bits';
-import { RowUpdateForm } from './FactEdit';
+import { CaseDetailsForm, documentSource, RowUpdateForm } from './FactEdit';
 import { NoteField, noteLimitError } from './NoteField';
 
 export type PopMode = 'review' | 'view' | 'request';
@@ -82,13 +82,67 @@ export function DocPanel({ c, mode, reqKey, onClose }: Props) {
 
 function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mode: 'review' | 'view'; onDone: () => void }) {
   const doc = useMemo(() => buildDocument(c, reqKey), [c, reqKey]);
-  const [updating, setUpdating] = useState<string | null>(null);
+  // Which row's update form is open, and where it was opened from (top box or comparison table).
+  const [updating, setUpdating] = useState<{ label: string; at: 'top' | 'table' } | null>(null);
+  const [editingAll, setEditingAll] = useState(false);
+  const toggle = (label: string, at: 'top' | 'table') =>
+    setUpdating(updating?.label === label && updating.at === at ? null : { label, at });
   const canUpdate = !isReadOnly(c);
   const vinfo = c.vinfo[reqKey];
   const status = c.ver[reqKey];
   return (
     <>
       {mode === 'view' && status === 'r' && isReadOnly(c) && <Notice tone="lock">{readOnlyReason(c)} This document hasn't been reviewed.</Notice>}
+      <section className="diffs" aria-labelledby="diffs-title" data-testid="differences">
+        <DifferencesSummary doc={doc} />
+        {doc.compare.some((r) => r.result === 'mismatch') && (
+          <ul className="diff-list">
+            {doc.compare
+              .filter((r) => r.result === 'mismatch')
+              .map((r) => (
+                <li key={r.label}>
+                  <div className="diff-row">
+                    <div>
+                      <div className="diff-label">{r.label}</div>
+                      <div className="small">
+                        Document: <strong>{r.doc}</strong> · {r.source?.trust === 'rule' ? 'Rule' : 'Case'}: <strong>{r.record}</strong>
+                      </div>
+                    </div>
+                    {r.update && canUpdate ? (
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        aria-expanded={updating?.label === r.label && updating.at === 'top'}
+                        onClick={() => toggle(r.label, 'top')}
+                      >
+                        {updating?.label === r.label && updating.at === 'top' ? 'Cancel' : 'Update record'}
+                        <span className="sr-only"> for {r.label.toLowerCase()}</span>
+                      </button>
+                    ) : r.source?.trust === 'rule' ? (
+                      <span className="small muted">Can't be fixed on the case. Reject or request a new copy.</span>
+                    ) : null}
+                  </div>
+                  {updating?.label === r.label && updating.at === 'top' && r.update && (
+                    <RowUpdateForm c={c} reqKey={reqKey} field={r.update.field} value={r.update.value} onDone={() => setUpdating(null)} />
+                  )}
+                </li>
+              ))}
+          </ul>
+        )}
+        {canUpdate && (
+          <div className="diff-actions">
+            {!editingAll && (
+              <button type="button" className="link-btn" onClick={() => setEditingAll(true)}>
+                Something else out of date? Edit case details
+              </button>
+            )}
+            <a className="link-btn" href="#compare-title" onClick={(e) => { e.preventDefault(); document.getElementById('compare-title')?.scrollIntoView({ block: 'start' }); }}>
+              See full comparison ↓
+            </a>
+          </div>
+        )}
+        {editingAll && <CaseDetailsForm c={c} defaultSource={documentSource(c, reqKey)} onDone={() => setEditingAll(false)} />}
+      </section>
       {!!c.rinfo[reqKey]?.files?.length && <AttachedFiles files={c.rinfo[reqKey]!.files!} />}
       <figure className="paper" style={{ margin: 0 }} aria-label={`${doc.title} (sample document)`}>
         <span className="paper-watermark">Sample · fictional</span>
@@ -155,16 +209,16 @@ function DocumentView({ c, reqKey, mode, onDone }: { c: Case; reqKey: ReqKey; mo
                     <button
                       type="button"
                       className="link-btn update-link"
-                      aria-expanded={updating === r.label}
-                      onClick={() => setUpdating(updating === r.label ? null : r.label)}
+                      aria-expanded={updating?.label === r.label && updating.at === 'table'}
+                      onClick={() => toggle(r.label, 'table')}
                     >
-                      {updating === r.label ? 'Cancel update' : 'Update record'}
+                      {updating?.label === r.label && updating.at === 'table' ? 'Cancel update' : 'Update record'}
                       <span className="sr-only"> for {r.label.toLowerCase()}</span>
                     </button>
                   )}
                 </td>
               </tr>
-              {updating === r.label && r.update && (
+              {updating?.label === r.label && updating.at === 'table' && r.update && (
                 <tr className="update-row">
                   <td colSpan={4}>
                     <RowUpdateForm c={c} reqKey={reqKey} field={r.update.field} value={r.update.value} onDone={() => setUpdating(null)} />
@@ -453,5 +507,19 @@ function PaperTable({ t }: { t: DocTable }) {
         </table>
       </div>
     </section>
+  );
+}
+
+/** One line at the top of the review: how many details differ from the case, or that none do. */
+function DifferencesSummary({ doc }: { doc: ReturnType<typeof buildDocument> }) {
+  const checked = doc.compare.filter((r) => r.result !== 'none');
+  const diffs = checked.filter((r) => r.result === 'mismatch');
+  return (
+    <h3 id="diffs-title" className={`diffs-title ${diffs.length ? 'has-diffs' : 'no-diffs'}`}>
+      <span aria-hidden="true">{diffs.length ? '✕' : '✓'}</span>{' '}
+      {diffs.length
+        ? `${diffs.length} of ${checked.length} checked details ${diffs.length === 1 ? "doesn't" : "don't"} match`
+        : `All ${checked.length} checked details match the case`}
+    </h3>
   );
 }
