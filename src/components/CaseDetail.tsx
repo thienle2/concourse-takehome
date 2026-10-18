@@ -122,6 +122,7 @@ export function CaseDetail({ c, navIds, onNavigate, onBack }: Props) {
                     {u && <strong className={`urgency ${u.cls}`} style={{ marginLeft: 6 }}>{u.text}</strong>}
                   </span>
                   <span>Food assistance recertification</span>
+                  <span>Assigned to you</span>
                 </div>
               </div>
               {/* Every case opens the same placeholder PDF; the data has no application files. */}

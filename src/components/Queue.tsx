@@ -77,7 +77,9 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
       <div className="page-head">
         <div>
           <p className="date">{fmtLong(TODAY)}</p>
-          <h1>Recertification queue</h1>
+          {/* Every case in cases.json is Dana's; the data has no assigned-worker field. */}
+          <h1>Your recertification cases</h1>
+          <p className="counts" data-testid="queue-owner">Assigned to you, Dana Whitfield. Cases assigned to other workers aren't shown.</p>
           <p className="counts">
             {open.length} open cases · <strong>{needs.length} need action</strong> · {cases.length - open.length} decided
           </p>

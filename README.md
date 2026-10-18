@@ -50,6 +50,7 @@ Keyboard: `S` start working, `J`/`K` next/previous (rows in the queue, cases in 
 - Each requirement shows how long it has been waiting and can expand into its own history. Actions taken here are tagged with their requirement; events from `cases.json` are matched by the requirement or document named in their text.
 - Every case has a "View full application (PDF)" link that opens `public/sample-application.pdf` in a new tab. It's one blank, clearly fictional form shared by all cases, since the data has no application files.
 - Cases awaiting a decision can be sent a "Remind supervisor" (recorded only, nothing is sent), at most once a day. When the due date is within 3 days or past (placeholder threshold), it becomes the case's next step, and the queue flags the case on the Awaiting decision tab.
+- Every case in `cases.json` is treated as assigned to Dana; the data has no assigned-worker field. The queue and each case say so. `locked` means a colleague has the case open, not that they own it.
 - `Follow up` opens the request pop-out for the first outstanding requirement ("Send another request").
 - Undo restores the case as it was but keeps history, adding an "Undid: …" entry so the record stays complete.
 - Received dates are tracked per requirement once logged here (`rinfo`); the case-level `rdate` from the data is the fallback.
