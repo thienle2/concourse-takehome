@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { fmtLong, fmtShort, TODAY } from '../lib/date';
 import { STATUS_LABEL } from '../lib/labels';
-import { DEFAULT_VIEW, filterCases, isWorkable, PAGE_SIZE, statusOptions, TABS, TILES, type QueueView, type SortKey } from '../lib/queue';
+import { DEFAULT_VIEW, filterCases, isWorkable, PAGE_SIZE, statusOptions, TABS, type QueueView, type SortKey } from '../lib/queue';
 import { docsSummary, isOpen, lastActivity, needsAction, nextAction } from '../lib/status';
 import { REQ_KEYS, type Case, type CaseStatus } from '../lib/types';
 import { DueCell, SnoozeTag, StatusPill } from './bits';
@@ -66,7 +66,6 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
   });
 
   const chips: { label: string; clear: () => void }[] = [];
-  if (view.tile) chips.push({ label: `Tile: ${TILES.find((t) => t.key === view.tile)!.label}`, clear: () => update({ tile: null }) });
   if (view.status) chips.push({ label: `Status: ${STATUS_LABEL[view.status]}`, clear: () => update({ status: '' }) });
   if (view.search.trim()) chips.push({ label: `Search: “${view.search.trim()}”`, clear: () => update({ search: '' }) });
   const filtered = chips.length > 0;
@@ -94,27 +93,6 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
           </button>
         </div>
       </div>
-
-      <section aria-label="Summary filters" className="tiles">
-        {TILES.map((t) => {
-          const n = open.filter(t.test).length;
-          const on = view.tile === t.key;
-          return (
-            <button
-              key={t.key}
-              type="button"
-              className="tile"
-              aria-pressed={on}
-              onClick={() => update(on ? { tile: null } : { tile: t.key, tab: 'open' })}
-            >
-              <span className="tile-num">{n}</span>
-              <span className="tile-label">{t.label}</span>
-              <span className="tile-sub">{t.sub}</span>
-              <span className="tile-state">{on ? '✓ Filtering the list' : 'Show these'}</span>
-            </button>
-          );
-        })}
-      </section>
 
       <section className="card" aria-labelledby="list-title">
         <h2 id="list-title" className="sr-only">Cases</h2>
@@ -157,7 +135,7 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
                 <button type="button" onClick={c.clear} aria-label={`Remove filter ${c.label}`}>×</button>
               </span>
             ))}
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => update({ tile: null, status: '', search: '' })}>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => update({ status: '', search: '' })}>
               Clear all
             </button>
           </div>
@@ -173,7 +151,7 @@ export function Queue({ cases, view, setView, onOpen }: Props) {
               <div className="empty-icon" style={{ background: 'var(--gray-bg)', color: 'var(--gray)' }} aria-hidden="true">⌕</div>
               <h3>No cases match</h3>
               <p>Nothing in “{TABS.find((t) => t.key === view.tab)!.label}” matches these filters.</p>
-              <button type="button" className="btn" onClick={() => update({ tile: null, status: '', search: '' })}>
+              <button type="button" className="btn" onClick={() => update({ status: '', search: '' })}>
                 Reset filters
               </button>
             </div>
@@ -313,14 +291,6 @@ export function QueueSkeleton() {
           <div className="skeleton" style={{ height: 14, width: 180, marginBottom: 10 }} />
           <div className="skeleton" style={{ height: 28, width: 300 }} />
         </div>
-      </div>
-      <div className="tiles">
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="tile" style={{ cursor: 'default' }}>
-            <div className="skeleton" style={{ height: 30, width: 50, marginBottom: 8 }} />
-            <div className="skeleton" style={{ height: 14, width: '70%' }} />
-          </div>
-        ))}
       </div>
       <div className="card">
         {Array.from({ length: 8 }, (_, i) => (

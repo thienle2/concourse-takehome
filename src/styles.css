@@ -141,14 +141,6 @@ fieldset legend { padding: 0; }
 .page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
 .page-head .date { color: var(--ink-3); font-size: 14px; margin-bottom: 2px; }
 .counts { color: var(--ink-2); font-size: 14px; margin-top: 4px; }
-.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
-.tile { text-align: left; background: var(--card); border: 2px solid transparent; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; min-height: 44px; }
-.tile:hover { border-color: #d3d6e4; }
-.tile[aria-pressed='true'] { border-color: var(--ink); }
-.tile-num { font-size: 30px; font-weight: 600; line-height: 1.2; }
-.tile-label { font-weight: 500; font-size: 14px; }
-.tile-sub { font-size: 12px; color: var(--ink-3); }
-.tile-state { font-size: 12px; font-weight: 500; color: var(--ink); margin-top: 4px; }
 
 .tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 0 -24px 16px; padding: 0 24px; scrollbar-width: thin; }
 .tab { background: none; border: none; border-bottom: 3px solid transparent; padding: 10px 14px; min-height: 48px; font-weight: 500; font-size: 14px; color: var(--ink-3); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
@@ -315,7 +307,6 @@ table.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
   .popout { position: fixed; inset: 0; max-height: none; border-radius: 0; border: none; z-index: 30; }
 }
 @media (max-width: 900px) {
-  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .queue thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .queue, .queue tbody, .queue tr, .queue td { display: block; width: 100%; }
   .queue tr { border-bottom: 1px solid var(--line); padding: 8px 0; }

@@ -3,7 +3,6 @@ import {
   caseStatus,
   hasOutstanding,
   isDueWithin7,
-  isFollowUpDue,
   isOpen,
   isOverdue,
   isReadOnly,
@@ -14,19 +13,17 @@ import {
 import type { Case, CaseStatus } from './types';
 
 export type TabKey = 'needs' | 'open' | 'overdue' | 'due7' | 'outstanding' | 'snoozed' | 'awaiting';
-export type TileKey = 'overdue' | 'due7' | 'review' | 'followup';
 export type SortKey = 'due' | 'name' | 'id' | 'status' | 'last';
 
 export interface QueueView {
   tab: TabKey;
   search: string;
   status: CaseStatus | '';
-  tile: TileKey | null;
   sort: { key: SortKey; dir: 'asc' | 'desc' };
   page: number;
 }
 
-export const DEFAULT_VIEW: QueueView = { tab: 'needs', search: '', status: '', tile: null, sort: { key: 'due', dir: 'asc' }, page: 1 };
+export const DEFAULT_VIEW: QueueView = { tab: 'needs', search: '', status: '', sort: { key: 'due', dir: 'asc' }, page: 1 };
 export const PAGE_SIZE = 25;
 
 export const TABS: { key: TabKey; label: string; test: (c: Case) => boolean }[] = [
@@ -37,13 +34,6 @@ export const TABS: { key: TabKey; label: string; test: (c: Case) => boolean }[] 
   { key: 'outstanding', label: 'Documents outstanding', test: hasOutstanding },
   { key: 'snoozed', label: 'Snoozed', test: isSnoozed },
   { key: 'awaiting', label: 'Awaiting decision', test: (c) => caseStatus(c) === 'ready' },
-];
-
-export const TILES: { key: TileKey; label: string; sub: string; test: (c: Case) => boolean }[] = [
-  { key: 'overdue', label: 'Overdue', sub: 'Past the due date', test: isOverdue },
-  { key: 'due7', label: 'Due within 7 days', sub: 'Today through next week', test: isDueWithin7 },
-  { key: 'review', label: 'Ready to review', sub: 'Documents waiting on you', test: (c) => caseStatus(c) === 'review' },
-  { key: 'followup', label: 'Follow-ups due', sub: 'Follow-up date today or earlier', test: isFollowUpDue },
 ];
 
 const STATUS_ORDER: CaseStatus[] = ['review', 'missing', 'waiting', 'verified', 'ready', 'decided'];
@@ -57,9 +47,8 @@ function matchesSearch(c: Case, q: string): boolean {
 
 export function filterCases(cases: Case[], v: QueueView): Case[] {
   const tab = TABS.find((t) => t.key === v.tab)!;
-  const tile = v.tile ? TILES.find((t) => t.key === v.tile)! : null;
   const rows = cases.filter(
-    (c) => tab.test(c) && (!tile || (isOpen(c) && tile.test(c))) && (!v.status || caseStatus(c) === v.status) && matchesSearch(c, v.search),
+    (c) => tab.test(c) && (!v.status || caseStatus(c) === v.status) && matchesSearch(c, v.search),
   );
   const dir = v.sort.dir === 'asc' ? 1 : -1;
   const val = (c: Case): string | number => {

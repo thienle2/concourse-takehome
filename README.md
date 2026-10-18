@@ -24,7 +24,7 @@ Tests: `npx playwright install chromium` once, then `npm test`.
 | Address parsing and placeholder state/ZIP | `src/lib/address.ts` |
 | "At a glance" case summary | `src/lib/summary.ts` |
 | Per-requirement history and waiting time | `src/lib/timeline.ts` |
-| Tabs, tiles, filtering, sorting | `src/lib/queue.ts` |
+| Tabs, filtering, sorting | `src/lib/queue.ts` |
 | useReducer store, save/undo, failure switch | `src/state/store.tsx` |
 | Screens | `src/components/` |
 | Data (loaded with fetch, so loading and failure states are real) | `public/cases.json` |
